@@ -1,10 +1,14 @@
 package dblayer
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"si-community/models"
+	"time"
 
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,6 +25,20 @@ type Bool struct {
 	True string
 }
 
+type Claims struct {
+	UserID int32 `json:"user_id"`
+	jwt.StandardClaims
+}
+
+func generateRandomKey(length int) (string, error) {
+	key := make([]byte, length)
+	_, err := rand.Read(key)
+	if err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(key), nil
+}
+
 func DBConnection() (*DBORM, error) {
 	connection := "test:test1234@tcp(127.0.0.1:3306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})
@@ -33,7 +51,7 @@ func (db *DBORM) AddUser(user models.Users) (models.Users, error) {
 	fmt.Println("dblayer AddUser")
 
 	var hasUserCount int64
-	// result := db.Table("users").Where(newUser{Email: user.Email}).Or(newUser{Nickname: user.Nickname}).First(&oldUser)
+
 	db.Table("users").
 		Where(&models.Users{Email: user.Email}).
 		Or(&models.Users{Nickname: user.Nickname}).
@@ -65,6 +83,44 @@ func hashPassword(password *string) error {
 
 	*password = string(hashedBytes[:])
 	return nil
+}
+
+func (db *DBORM) addToken(token models.Tokens, registerNumber int32) (models.Tokens, error) {
+	token, err := GenerateToken(registerNumber)
+	if err != nil {
+		return token, err
+	}
+
+	return token, db.Omit("token_id").Create(&token).Error
+}
+
+func GenerateToken(registerNumber int32) (models.Tokens, error) {
+	expirationTime := time.Now().Add(12 * time.Hour)
+
+	claims := &Claims{
+		UserID: registerNumber,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	secretKey, err := generateRandomKey(32)
+	if err != nil {
+		return models.Tokens{}, err
+	}
+
+	signedToken, err := token.SignedString([]byte(secretKey))
+	if err != nil {
+		return models.Tokens{}, err
+	}
+
+	return models.Tokens{
+		RegisterNumber: registerNumber,
+		Token:          signedToken,
+		ExpirationTime: expirationTime,
+	}, nil
 }
 
 // func (db *DBORM) GetUsersByEmailAndNickname(user models.Users) (models.Users, error) {
