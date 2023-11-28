@@ -85,7 +85,7 @@ func hashPassword(password *string) error {
 	return nil
 }
 
-func (db *DBORM) addToken(token models.Tokens, registerNumber int32) (models.Tokens, error) {
+func (db *DBORM) addToken(registerNumber int32) (models.Tokens, error) {
 	token, err := GenerateToken(registerNumber)
 	if err != nil {
 		return token, err
@@ -121,6 +121,41 @@ func GenerateToken(registerNumber int32) (models.Tokens, error) {
 		Token:          signedToken,
 		ExpirationTime: expirationTime,
 	}, nil
+}
+
+func (db *DBORM) SignInUser(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
+	var user models.Users
+	fmt.Println("userRequestDto")
+	fmt.Println(userRequestDto)
+	result := db.Table("Users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	if result.Error != nil {
+		return models.UserResponseDto{}, result.Error
+	}
+
+	if !checkPassword(user.Password, userRequestDto.Password) {
+		return models.UserResponseDto{}, errors.New("Invalid password")
+	}
+
+	token, err := db.addToken(user.RegisterNumber)
+	if err != nil {
+		return models.UserResponseDto{}, err
+	}
+
+	userResponseDto := models.UserResponseDto{
+		RegisterNumber: user.RegisterNumber,
+		Email:          user.Email,
+		Nickname:       user.Nickname,
+		Company:        user.Company,
+		TokenId:        token.TokenId,
+		Token:          token.Token,
+		ExpirationTime: token.ExpirationTime,
+	}
+
+	return userResponseDto, nil
+}
+
+func checkPassword(existingHash, password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(existingHash), []byte(password)) == nil
 }
 
 // func (db *DBORM) GetUsersByEmailAndNickname(user models.Users) (models.Users, error) {

@@ -11,6 +11,7 @@ import (
 
 type HandlerInterface interface {
 	AddUser(c *gin.Context)
+	SignIn(c *gin.Context)
 }
 
 type Handler struct {
@@ -50,4 +51,27 @@ func (h *Handler) AddUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, user)
+}
+
+func (h *Handler) SignIn(c *gin.Context) {
+	if h.db == nil {
+		fmt.Println("DB is nil")
+		return
+	}
+
+	var userRequestDto models.UserRequestDto
+	err := c.ShouldBindJSON(&userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userResponseDto, err := h.db.SignInUser(userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, userResponseDto)
+
+	return
 }

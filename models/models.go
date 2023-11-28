@@ -29,6 +29,10 @@ type Tokens struct {
 	ExpirationTime time.Time `gorm:"column:expiration_time" json:"expiration_time"`
 }
 
+func (Tokens) TableName() string {
+	return "user_tokens"
+}
+
 // type ArticleReplies struct {
 // 	gorm.Model
 // 	ReplyId    int32     `gorm:"column:reply_id" json:"reply_id"`
