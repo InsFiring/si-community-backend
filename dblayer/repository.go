@@ -94,6 +94,31 @@ func (db *DBORM) addToken(registerNumber int32) (models.Tokens, error) {
 	return token, db.Omit("token_id").Create(&token).Error
 }
 
+func (db *DBORM) getToken(registerNumber int32) (models.Tokens, error) {
+	var token models.Tokens
+	result := db.Table("user_tokens").
+		Where(&models.Tokens{RegisterNumber: registerNumber}).
+		Order("token_id DESC").
+		Limit(1).
+		Find(&token)
+
+	err := result.Error
+	if err != nil {
+		return token, err
+	}
+
+	if time.Now().Before(token.ExpirationTime) {
+		return token, err
+	}
+
+	token, err = db.addToken(registerNumber)
+	if err != nil {
+		return token, err
+	}
+
+	return token, err
+}
+
 func GenerateToken(registerNumber int32) (models.Tokens, error) {
 	expirationTime := time.Now().Add(12 * time.Hour)
 
@@ -125,18 +150,23 @@ func GenerateToken(registerNumber int32) (models.Tokens, error) {
 
 func (db *DBORM) SignInUser(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
 	var user models.Users
-	fmt.Println("userRequestDto")
-	fmt.Println(userRequestDto)
+	var userCount int64
+
 	result := db.Table("Users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
 		return models.UserResponseDto{}, result.Error
+	}
+
+	result.Count(&userCount)
+	if userCount == 0 {
+		return models.UserResponseDto{}, errors.New("User not Founded")
 	}
 
 	if !checkPassword(user.Password, userRequestDto.Password) {
 		return models.UserResponseDto{}, errors.New("Invalid password")
 	}
 
-	token, err := db.addToken(user.RegisterNumber)
+	token, err := db.getToken(user.RegisterNumber)
 	if err != nil {
 		return models.UserResponseDto{}, err
 	}
