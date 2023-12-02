@@ -16,6 +16,7 @@ import (
 
 const True string = "y"
 const False string = "n"
+const TokenExpirationHour = 12
 
 type DBORM struct {
 	*gorm.DB
@@ -107,6 +108,8 @@ func (db *DBORM) getToken(registerNumber int32) (models.Tokens, error) {
 		return token, err
 	}
 
+	// fmt.Printf("now : %s\n", time.Now().Format("2006-01-02 15:04:05"))
+	// fmt.Printf("token : %s\n", token.ExpirationTime.Format("2006-01-02 15:04:05"))
 	if time.Now().Before(token.ExpirationTime) {
 		return token, err
 	}
@@ -120,7 +123,7 @@ func (db *DBORM) getToken(registerNumber int32) (models.Tokens, error) {
 }
 
 func GenerateToken(registerNumber int32) (models.Tokens, error) {
-	expirationTime := time.Now().Add(12 * time.Hour)
+	expirationTime := time.Now().Add(TokenExpirationHour * time.Hour)
 
 	claims := &Claims{
 		UserID: registerNumber,
@@ -186,6 +189,39 @@ func (db *DBORM) SignInUser(userRequestDto models.UserRequestDto) (models.UserRe
 
 func checkPassword(existingHash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(existingHash), []byte(password)) == nil
+}
+
+func (db *DBORM) ChangePassword(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
+	var user models.Users
+	var userCount int64
+
+	result := db.Table("Users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	if result.Error != nil {
+		return models.UserResponseDto{}, result.Error
+	}
+
+	result.Count(&userCount)
+	if userCount == 0 {
+		return models.UserResponseDto{}, errors.New("User not Founded")
+	}
+
+	hashPassword(&user.Password)
+
+	err := db.Model(&user).
+		Where(&models.Users{Email: userRequestDto.Email}).
+		Update("password", user.Password).Error
+	if err != nil {
+		return models.UserResponseDto{}, err
+	}
+
+	userResponseDto := models.UserResponseDto{
+		RegisterNumber: user.RegisterNumber,
+		Email:          user.Email,
+		Nickname:       user.Nickname,
+		Company:        user.Company,
+	}
+
+	return userResponseDto, nil
 }
 
 // func (db *DBORM) GetUsersByEmailAndNickname(user models.Users) (models.Users, error) {

@@ -19,6 +19,7 @@ func RunApiWithHandler(address string, handler HandlerInterface) error {
 		// 유저 추가
 		usersGroup.POST("", handler.AddUser)
 		usersGroup.POST("/signin", handler.SignIn)
+		usersGroup.POST("/changePassword", handler.ChangePassword)
 	}
 
 	return r.Run(address)

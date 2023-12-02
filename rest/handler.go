@@ -12,6 +12,7 @@ import (
 type HandlerInterface interface {
 	AddUser(c *gin.Context)
 	SignIn(c *gin.Context)
+	ChangePassword(c *gin.Context)
 }
 
 type Handler struct {
@@ -74,4 +75,29 @@ func (h *Handler) SignIn(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponseDto)
 
 	return
+}
+
+// TODO: 이메일 인증 부분 구현 필요(일단은 인증 없이 구현)ㄴ
+func (h *Handler) ChangePassword(c *gin.Context) {
+	if h.db == nil {
+		fmt.Println("DB is nil")
+		return
+	}
+
+	var userRequestDto models.UserRequestDto
+	err := c.ShouldBindJSON(&userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userResponseDto, err := h.db.ChangePassword(userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, userResponseDto)
+
+	return
+
 }
