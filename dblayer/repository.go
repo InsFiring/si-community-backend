@@ -41,7 +41,8 @@ func generateRandomKey(length int) (string, error) {
 }
 
 func DBConnection() (*DBORM, error) {
-	connection := "test:test1234@tcp(127.0.0.1:3306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
+	// connection := "test:test1234@tcp(127.0.0.1:3306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
+	connection := "test:test1234@tcp(127.0.0.1:13306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})
 	return &DBORM{
 		DB: db,
