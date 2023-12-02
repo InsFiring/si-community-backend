@@ -156,7 +156,7 @@ func (db *DBORM) SignInUser(userRequestDto models.UserRequestDto) (models.UserRe
 	var user models.Users
 	var userCount int64
 
-	result := db.Table("Users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	result := db.Table("users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
 		return models.UserResponseDto{}, result.Error
 	}
@@ -196,7 +196,7 @@ func (db *DBORM) ChangePassword(userRequestDto models.UserRequestDto) (models.Us
 	var user models.Users
 	var userCount int64
 
-	result := db.Table("Users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	result := db.Table("users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
 		return models.UserResponseDto{}, result.Error
 	}
