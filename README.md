@@ -14,3 +14,4 @@ $ go run main.go
 ```
 
 ## API
+* [swagger](http://localhost:8000/swagger/index.html) 링크에서 확인 가능

@@ -24,6 +24,16 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [
+                    {
+                        "description": "email, password, nickname, company만 있으면 됨",
+                        "name": "users",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -43,6 +53,17 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [
+                    {
+                        "description": "비밀번호 변경 input",
+                        "name": "users",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserRequestDto"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -61,6 +82,17 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "parameters": [
+                    {
+                        "description": "로그인 input",
+                        "name": "users",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserRequestDto"
+                        }
+                    }
                 ],
                 "responses": {
                     "201": {
@@ -83,6 +115,17 @@ const docTemplate = `{
                 "valid": {
                     "description": "Valid is true if Time is not NULL",
                     "type": "boolean"
+                }
+            }
+        },
+        "models.UserRequestDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
                 }
             }
         },

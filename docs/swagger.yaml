@@ -8,6 +8,13 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  models.UserRequestDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   models.UserResponseDto:
     properties:
       company:
@@ -62,6 +69,12 @@ paths:
       consumes:
       - application/json
       description: 회원 가입
+      parameters:
+      - description: email, password, nickname, company만 있으면 됨
+        in: body
+        name: users
+        schema:
+          $ref: '#/definitions/models.Users'
       produces:
       - application/json
       responses:
@@ -74,6 +87,13 @@ paths:
       consumes:
       - application/json
       description: 비밀번호 변경
+      parameters:
+      - description: 비밀번호 변경 input
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequestDto'
       produces:
       - application/json
       responses:
@@ -86,6 +106,13 @@ paths:
       consumes:
       - application/json
       description: 로그인
+      parameters:
+      - description: 로그인 input
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequestDto'
       produces:
       - application/json
       responses:

@@ -38,6 +38,7 @@ func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
 // @name Add User
 // @Accept  json
 // @Produce  json
+// @Param users body models.Users false "email, password, nickname, company만 있으면 됨"
 // @Router /v1/users [post]
 // @Success 201 {object} models.Users
 func (h *Handler) AddUser(c *gin.Context) {
@@ -68,6 +69,7 @@ func (h *Handler) AddUser(c *gin.Context) {
 // @name Sign In
 // @Accept  json
 // @Produce  json
+// @Param users body models.UserRequestDto true "로그인 input"
 // @Router /v1/users/signin [post]
 // @Success 201 {object} models.UserResponseDto
 func (h *Handler) SignIn(c *gin.Context) {
@@ -97,6 +99,7 @@ func (h *Handler) SignIn(c *gin.Context) {
 // @name ChangePassword
 // @Accept  json
 // @Produce  json
+// @Param users body models.UserRequestDto true "비밀번호 변경 input"
 // @Router /v1/users/changePassword [post]
 // @Success 201 {object} models.UserResponseDto
 func (h *Handler) ChangePassword(c *gin.Context) {
