@@ -34,6 +34,12 @@ func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
 	return &Handler{db: db}
 }
 
+// @Description 자세한 설명은 이곳에 적습니다.
+// @name add user
+// @Accept  json
+// @Produce  json
+// @Router /v1/users [post]
+// @Success 200 {object} models.UserResponseDto
 func (h *Handler) AddUser(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
