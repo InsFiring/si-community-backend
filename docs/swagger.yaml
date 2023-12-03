@@ -1,5 +1,13 @@
 basePath: /v1
 definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
   models.UserResponseDto:
     properties:
       company:
@@ -17,6 +25,31 @@ definitions:
       token_id:
         type: integer
     type: object
+  models.Users:
+    properties:
+      company:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: string
+      loggedin:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+      register_number:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact: {}
@@ -29,6 +62,18 @@ paths:
       consumes:
       - application/json
       description: 회원 가입
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Users'
+  /v1/users/changePassword:
+    post:
+      consumes:
+      - application/json
+      description: 비밀번호 변경
       produces:
       - application/json
       responses:

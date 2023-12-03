@@ -93,7 +93,6 @@ func (h *Handler) SignIn(c *gin.Context) {
 	return
 }
 
-// TODO: 이메일 인증 부분 구현 필요(일단은 인증 없이 구현)
 // @Description 비밀번호 변경
 // @name ChangePassword
 // @Accept  json

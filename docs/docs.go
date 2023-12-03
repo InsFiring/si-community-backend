@@ -28,6 +28,25 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
+                            "$ref": "#/definitions/models.Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/changePassword": {
+            "post": {
+                "description": "비밀번호 변경",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
                             "$ref": "#/definitions/models.UserResponseDto"
                         }
                     }
@@ -55,6 +74,18 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
         "models.UserResponseDto": {
             "type": "object",
             "properties": {
@@ -78,6 +109,44 @@ const docTemplate = `{
                 },
                 "token_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.Users": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_active": {
+                    "type": "string"
+                },
+                "loggedin": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "register_number": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         }
