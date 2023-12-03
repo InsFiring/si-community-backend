@@ -34,12 +34,12 @@ func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
 	return &Handler{db: db}
 }
 
-// @Description 자세한 설명은 이곳에 적습니다.
-// @name add user
+// @Description 회원 가입
+// @name Add User
 // @Accept  json
 // @Produce  json
 // @Router /v1/users [post]
-// @Success 200 {object} models.UserResponseDto
+// @Success 201 {object} models.UserResponseDto
 func (h *Handler) AddUser(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
@@ -64,6 +64,12 @@ func (h *Handler) AddUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
+// @Description 로그인
+// @name Sign In
+// @Accept  json
+// @Produce  json
+// @Router /v1/users/signin [post]
+// @Success 201 {object} models.UserResponseDto
 func (h *Handler) SignIn(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")

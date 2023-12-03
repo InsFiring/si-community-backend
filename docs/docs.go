@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/v1/users": {
             "post": {
-                "description": "자세한 설명은 이곳에 적습니다.",
+                "description": "회원 가입",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,8 +25,27 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/signin": {
+            "post": {
+                "description": "로그인",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.UserResponseDto"
                         }

@@ -28,12 +28,24 @@ paths:
     post:
       consumes:
       - application/json
-      description: 자세한 설명은 이곳에 적습니다.
+      description: 회원 가입
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponseDto'
+  /v1/users/signin:
+    post:
+      consumes:
+      - application/json
+      description: 로그인
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.UserResponseDto'
 swagger: "2.0"
