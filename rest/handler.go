@@ -30,6 +30,10 @@ func NewHandler() (*Handler, error) {
 	return handler, nil
 }
 
+func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
+	return &Handler{db: db}
+}
+
 func (h *Handler) AddUser(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
