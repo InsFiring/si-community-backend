@@ -39,7 +39,7 @@ func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
 // @Accept  json
 // @Produce  json
 // @Router /v1/users [post]
-// @Success 201 {object} models.UserResponseDto
+// @Success 201 {object} models.Users
 func (h *Handler) AddUser(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
@@ -93,7 +93,13 @@ func (h *Handler) SignIn(c *gin.Context) {
 	return
 }
 
-// TODO: 이메일 인증 부분 구현 필요(일단은 인증 없이 구현)ㄴ
+// TODO: 이메일 인증 부분 구현 필요(일단은 인증 없이 구현)
+// @Description 비밀번호 변경
+// @name ChangePassword
+// @Accept  json
+// @Produce  json
+// @Router /v1/users/changePassword [post]
+// @Success 201 {object} models.UserResponseDto
 func (h *Handler) ChangePassword(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
