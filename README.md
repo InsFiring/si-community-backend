@@ -6,11 +6,15 @@ SI 커뮤니티 백엔드 저장소 - go로 개발
 * init.sql 코드 내에 정의된 테이블들을 생성하며 필요에 따라 예제에 필요한 레코드를 생성하여 미리 저장할 수 있음
 
 ## 실행 방법
+* mysql docker 실행
 ```
 $ git clone https://github.com/InsFiring/si-community-backend.git
 $ cd si-community-backend
 $ docker-compose up -d
-$ go run main.go
+```
+* go언어로 빌드된 backend 실행
+```
+$ bin/si-community-backend
 ```
 
 ## API
