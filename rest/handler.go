@@ -19,6 +19,17 @@ type Handler struct {
 	db dblayer.DBlayer
 }
 
+func addTestData(dbConn dblayer.DBlayer) {
+	user := models.Users{
+		Email:    "test@gmail.com",
+		Password: "test1234",
+		Nickname: "test",
+		Company:  "keke",
+	}
+
+	dbConn.AddUser(user)
+}
+
 func NewHandler() (*Handler, error) {
 	dbConn, err := dblayer.DBConnection()
 	if err != nil {
@@ -27,6 +38,8 @@ func NewHandler() (*Handler, error) {
 	}
 	handler := new(Handler)
 	handler.db = dbConn
+
+	addTestData(dbConn)
 	return handler, nil
 }
 

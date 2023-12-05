@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS si_community;
+CREATE DATABASE si_community;
 USE si_community;
 
 DROP TABLE IF EXISTS users;
