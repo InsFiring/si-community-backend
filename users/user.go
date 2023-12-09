@@ -1,4 +1,4 @@
-package models
+package user
 
 import (
 	"time"
@@ -21,16 +21,19 @@ func (Users) TableName() string {
 	return "users"
 }
 
-type Tokens struct {
-	gorm.Model
-	TokenId        int64     `gorm:"column:token_id" json:"token_id"`
-	RegisterNumber int32     `gorm:"column:register_number" json:"register_number"`
-	Token          string    `gorm:"column:token" json:"token"`
-	ExpirationTime time.Time `gorm:"column:expiration_time" json:"expiration_time"`
+type UserRequestDto struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-func (Tokens) TableName() string {
-	return "user_tokens"
+type UserResponseDto struct {
+	RegisterNumber int32     `json:"register_number"`
+	Email          string    `json:"email"`
+	Nickname       string    `json:"nickname"`
+	Company        string    `json:"company"`
+	TokenId        int64     `json:"token_id"`
+	Token          string    `json:"token"`
+	ExpirationTime time.Time `json:"expiration_time"`
 }
 
 // type ArticleReplies struct {

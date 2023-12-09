@@ -3,8 +3,7 @@ package rest
 import (
 	"fmt"
 	"net/http"
-	"si-community/dblayer"
-	"si-community/models"
+	user "si-community/users"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,11 +15,11 @@ type HandlerInterface interface {
 }
 
 type Handler struct {
-	db dblayer.DBlayer
+	db user.DBlayer
 }
 
-func addTestData(dbConn dblayer.DBlayer) {
-	user := models.Users{
+func addTestData(dbConn user.DBlayer) {
+	user := user.Users{
 		Email:    "test@gmail.com",
 		Password: "test1234",
 		Nickname: "test",
@@ -31,7 +30,7 @@ func addTestData(dbConn dblayer.DBlayer) {
 }
 
 func NewHandler() (*Handler, error) {
-	dbConn, err := dblayer.DBConnection()
+	dbConn, err := user.DBConnection()
 	if err != nil {
 		fmt.Println("DBConn error")
 		return nil, err
@@ -43,7 +42,7 @@ func NewHandler() (*Handler, error) {
 	return handler, nil
 }
 
-func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
+func NewHandlerWithDB(db user.DBlayer) HandlerInterface {
 	return &Handler{db: db}
 }
 
@@ -51,16 +50,16 @@ func NewHandlerWithDB(db dblayer.DBlayer) HandlerInterface {
 // @name Add User
 // @Accept  json
 // @Produce  json
-// @Param users body models.Users false "email, password, nickname, company만 있으면 됨"
+// @Param users body user.Users false "email, password, nickname, company만 있으면 됨"
 // @Router /v1/users [post]
-// @Success 201 {object} models.Users
+// @Success 201 {object} user.Users
 func (h *Handler) AddUser(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
 		return
 	}
 
-	var user models.Users
+	var user user.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
 		fmt.Println("ShouldBindJSON error")
 		fmt.Println(err)
@@ -82,16 +81,16 @@ func (h *Handler) AddUser(c *gin.Context) {
 // @name Sign In
 // @Accept  json
 // @Produce  json
-// @Param users body models.UserRequestDto true "로그인 input"
+// @Param users body user.Users true "로그인 input"
 // @Router /v1/users/signin [post]
-// @Success 201 {object} models.UserResponseDto
+// @Success 201 {object} user.Users
 func (h *Handler) SignIn(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
 		return
 	}
 
-	var userRequestDto models.UserRequestDto
+	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -112,16 +111,16 @@ func (h *Handler) SignIn(c *gin.Context) {
 // @name ChangePassword
 // @Accept  json
 // @Produce  json
-// @Param users body models.UserRequestDto true "비밀번호 변경 input"
+// @Param users body user.Users true "비밀번호 변경 input"
 // @Router /v1/users/changePassword [post]
-// @Success 201 {object} models.UserResponseDto
+// @Success 201 {object} user.Users
 func (h *Handler) ChangePassword(c *gin.Context) {
 	if h.db == nil {
 		fmt.Println("DB is nil")
 		return
 	}
 
-	var userRequestDto models.UserRequestDto
+	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

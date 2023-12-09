@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"si-community/rest"
+	rest "si-community/api/v1"
 )
 
 // @title Your Gin API

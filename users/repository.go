@@ -1,11 +1,10 @@
-package dblayer
+package user
 
 import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"si-community/models"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -49,14 +48,14 @@ func DBConnection() (*DBORM, error) {
 	}, err
 }
 
-func (db *DBORM) AddUser(user models.Users) (models.Users, error) {
+func (db *DBORM) AddUser(user Users) (Users, error) {
 	fmt.Println("dblayer AddUser")
 
 	var hasUserCount int64
 
 	db.Table("users").
-		Where(&models.Users{Email: user.Email}).
-		Or(&models.Users{Nickname: user.Nickname}).
+		Where(&Users{Email: user.Email}).
+		Or(&Users{Nickname: user.Nickname}).
 		Count(&hasUserCount)
 
 	if hasUserCount >= 1 {
@@ -87,7 +86,7 @@ func hashPassword(password *string) error {
 	return nil
 }
 
-func (db *DBORM) addToken(registerNumber int32) (models.Tokens, error) {
+func (db *DBORM) addToken(registerNumber int32) (Tokens, error) {
 	token, err := GenerateToken(registerNumber)
 	if err != nil {
 		return token, err
@@ -96,10 +95,10 @@ func (db *DBORM) addToken(registerNumber int32) (models.Tokens, error) {
 	return token, db.Omit("token_id").Create(&token).Error
 }
 
-func (db *DBORM) getToken(registerNumber int32) (models.Tokens, error) {
-	var token models.Tokens
+func (db *DBORM) getToken(registerNumber int32) (Tokens, error) {
+	var token Tokens
 	result := db.Table("user_tokens").
-		Where(&models.Tokens{RegisterNumber: registerNumber}).
+		Where(&Tokens{RegisterNumber: registerNumber}).
 		Order("token_id DESC").
 		Limit(1).
 		Find(&token)
@@ -123,7 +122,7 @@ func (db *DBORM) getToken(registerNumber int32) (models.Tokens, error) {
 	return token, err
 }
 
-func GenerateToken(registerNumber int32) (models.Tokens, error) {
+func GenerateToken(registerNumber int32) (Tokens, error) {
 	expirationTime := time.Now().Add(TokenExpirationHour * time.Hour)
 
 	claims := &Claims{
@@ -137,45 +136,45 @@ func GenerateToken(registerNumber int32) (models.Tokens, error) {
 
 	secretKey, err := generateRandomKey(32)
 	if err != nil {
-		return models.Tokens{}, err
+		return Tokens{}, err
 	}
 
 	signedToken, err := token.SignedString([]byte(secretKey))
 	if err != nil {
-		return models.Tokens{}, err
+		return Tokens{}, err
 	}
 
-	return models.Tokens{
+	return Tokens{
 		RegisterNumber: registerNumber,
 		Token:          signedToken,
 		ExpirationTime: expirationTime,
 	}, nil
 }
 
-func (db *DBORM) SignInUser(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
-	var user models.Users
+func (db *DBORM) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
+	var user Users
 	var userCount int64
 
-	result := db.Table("users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	result := db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
-		return models.UserResponseDto{}, result.Error
+		return UserResponseDto{}, result.Error
 	}
 
 	result.Count(&userCount)
 	if userCount == 0 {
-		return models.UserResponseDto{}, errors.New("User not Founded")
+		return UserResponseDto{}, errors.New("User not Founded")
 	}
 
 	if !checkPassword(user.Password, userRequestDto.Password) {
-		return models.UserResponseDto{}, errors.New("Invalid password")
+		return UserResponseDto{}, errors.New("Invalid password")
 	}
 
 	token, err := db.getToken(user.RegisterNumber)
 	if err != nil {
-		return models.UserResponseDto{}, err
+		return UserResponseDto{}, err
 	}
 
-	userResponseDto := models.UserResponseDto{
+	userResponseDto := UserResponseDto{
 		RegisterNumber: user.RegisterNumber,
 		Email:          user.Email,
 		Nickname:       user.Nickname,
@@ -192,30 +191,30 @@ func checkPassword(existingHash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(existingHash), []byte(password)) == nil
 }
 
-func (db *DBORM) ChangePassword(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
-	var user models.Users
+func (db *DBORM) ChangePassword(userRequestDto UserRequestDto) (UserResponseDto, error) {
+	var user Users
 	var userCount int64
 
-	result := db.Table("users").Where(&models.Users{Email: userRequestDto.Email}).Find(&user)
+	result := db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
-		return models.UserResponseDto{}, result.Error
+		return UserResponseDto{}, result.Error
 	}
 
 	result.Count(&userCount)
 	if userCount == 0 {
-		return models.UserResponseDto{}, errors.New("User not Founded")
+		return UserResponseDto{}, errors.New("User not Founded")
 	}
 
 	hashPassword(&user.Password)
 
 	err := db.Model(&user).
-		Where(&models.Users{Email: userRequestDto.Email}).
+		Where(&Users{Email: userRequestDto.Email}).
 		Update("password", user.Password).Error
 	if err != nil {
-		return models.UserResponseDto{}, err
+		return UserResponseDto{}, err
 	}
 
-	userResponseDto := models.UserResponseDto{
+	userResponseDto := UserResponseDto{
 		RegisterNumber: user.RegisterNumber,
 		Email:          user.Email,
 		Nickname:       user.Nickname,
@@ -225,9 +224,9 @@ func (db *DBORM) ChangePassword(userRequestDto models.UserRequestDto) (models.Us
 	return userResponseDto, nil
 }
 
-// func (db *DBORM) GetUsersByEmailAndNickname(user models.Users) (models.Users, error) {
+// func (db *DBORM) GetUsersByEmailAndNickname(user Users) (Users, error) {
 // 	fmt.Println("dblayer AddUser")
-// 	result := db.Table("Customers").Where(&models.Customer{Email: email})
+// 	result := db.Table("Customers").Where(&Customer{Email: email})
 
 // 	user.IsActive = True
 // 	user.LoggedIn = True

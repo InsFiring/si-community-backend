@@ -1,19 +1,18 @@
-package dblayer
+package user
 
 import (
 	"encoding/json"
-	"si-community/models"
 )
 
 type MockDBLayer struct {
 	err    error
-	users  []models.Users
-	tokens []models.Tokens
+	users  []Users
+	tokens []Tokens
 }
 
 func NewMockDBLayer(
-	users []models.Users,
-	tokens []models.Tokens) *MockDBLayer {
+	users []Users,
+	tokens []Tokens) *MockDBLayer {
 	return &MockDBLayer{
 		users:  users,
 		tokens: tokens,
@@ -61,19 +60,19 @@ func NewMockDBLayerWithData() *MockDBLayer {
 	]
 	`
 
-	var users []models.Users
-	var tokens []models.Tokens
+	var users []Users
+	var tokens []Tokens
 	json.Unmarshal([]byte(USERS), &users)
 	json.Unmarshal([]byte(TOKEN), &tokens)
 
 	return NewMockDBLayer(users, tokens)
 }
 
-func (mock *MockDBLayer) GetMockUserData() []models.Users {
+func (mock *MockDBLayer) GetMockUserData() []Users {
 	return mock.users
 }
 
-func (mock *MockDBLayer) GetMockTokenData() []models.Tokens {
+func (mock *MockDBLayer) GetMockTokenData() []Tokens {
 	return mock.tokens
 }
 
@@ -81,19 +80,19 @@ func (mock *MockDBLayer) SetError(err error) {
 	mock.err = err
 }
 
-func (mock *MockDBLayer) AddUser(user models.Users) (models.Users, error) {
+func (mock *MockDBLayer) AddUser(user Users) (Users, error) {
 	if mock.err != nil {
-		return models.Users{}, mock.err
+		return Users{}, mock.err
 	}
 
 	mock.users = append(mock.users, user)
 	return user, nil
 }
 
-func (mock *MockDBLayer) SignInUser(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
-	return models.UserResponseDto{}, nil
+func (mock *MockDBLayer) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
+	return UserResponseDto{}, nil
 }
 
-func (mock *MockDBLayer) ChangePassword(userRequestDto models.UserRequestDto) (models.UserResponseDto, error) {
-	return models.UserResponseDto{}, nil
+func (mock *MockDBLayer) ChangePassword(userRequestDto UserRequestDto) (UserResponseDto, error) {
+	return UserResponseDto{}, nil
 }
