@@ -1,4 +1,4 @@
-package rest
+package api
 
 import (
 	"fmt"
@@ -7,12 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-type HandlerInterface interface {
-	AddUser(c *gin.Context)
-	SignIn(c *gin.Context)
-	ChangePassword(c *gin.Context)
-}
 
 type Handler struct {
 	db user.DBlayer
@@ -135,5 +129,36 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponseDto)
 
 	return
+
+}
+
+// @Description 비밀번호 변경
+// @name ChangePassword
+// @Accept  json
+// @Produce  json
+// @Param users body user.Users true "비밀번호 변경 input"
+// @Router /v1/users/changePassword [post]
+// @Success 201 {object} user.Users
+func (h *Handler) AddArticle(c *gin.Context) {
+	// if h.db == nil {
+	// 	fmt.Println("DB is nil")
+	// 	return
+	// }
+
+	// var userRequestDto user.UserRequestDto
+	// err := c.ShouldBindJSON(&userRequestDto)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// userResponseDto, err := h.db.ChangePassword(userRequestDto)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+	// c.JSON(http.StatusOK, userResponseDto)
+
+	// return
 
 }

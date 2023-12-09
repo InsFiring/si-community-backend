@@ -1,4 +1,4 @@
-package rest
+package api
 
 // func TestHandler_AddUser(t *testing.T) {
 // 	gin.SetMode(gin.TestMode)

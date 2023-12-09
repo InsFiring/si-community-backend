@@ -1,4 +1,4 @@
-package rest
+package api
 
 import (
 	docs "si-community/docs"
@@ -29,6 +29,8 @@ func RunApiWithHandler(address string, handler HandlerInterface) error {
 		usersGroup.POST("/signin", handler.SignIn)
 		usersGroup.POST("/changePassword", handler.ChangePassword)
 	}
+
+	r.POST("/article", handler.AddArticle)
 
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

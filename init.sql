@@ -21,6 +21,21 @@ CREATE TABLE users (
 ) COMMENT '회원 정보 테이블'
 ;
 
+DROP TABLE IF EXISTS user_tokens;
+
+CREATE TABLE user_tokens (
+    token_id bigint auto_increment			COMMENT '자동생성 토큰번호'
+    , register_number int					COMMENT '유저 등록 번호(pk)'
+    , token TEXT NOT NULL					COMMENT '토큰'
+    , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
+    , created_at 	datetime				COMMENT '토큰 생성 날짜'
+	, updated_at 	datetime				COMMENT '토큰 수정 날짜'
+	, deleted_at 	datetime				COMMENT '토큰 삭제 날짜'
+    , primary key(token_id)
+) COMMENT '로그인 토큰 테이블'
+;
+
+
 DROP TABLE IF EXISTS articles;
 
 -- 회사 평가 게시판
@@ -34,10 +49,10 @@ CREATE TABLE articles (
 	, view_counts 	int					COMMENT '글 조회수'
 	, likes		 	int					COMMENT '글 좋아요'
 	, unlikes		int					COMMENT '글 싫어요'
-	, is_modified 	varchar(3)			COMMENT '글 수정 여부'
-	, is_deleted	varchar(3)			COMMENT '글 삭제 여부'
-	, created_at 	datetime			COMMENT '글 생성 날짜'
-	, modified_at 	datetime			COMMENT '글 수정 날짜'
+    , is_modified 	varchar(3)			COMMENT '글 수정 여부'
+	, created_at 	datetime			COMMENT '글 작성 날짜'
+	, updated_at 	datetime			COMMENT '글 수정 날짜'
+	, deleted_at 	datetime			COMMENT '글 삭제 날짜'
 	, primary key(article_id)
 ) COMMENT '게시글 테이블'
 ;
@@ -52,21 +67,9 @@ CREATE TABLE article_replies (
 	, likes		 	int					COMMENT '댓글 좋아요'
 	, unlikes		int					COMMENT '댓글 싫어요'
 	, is_modified 	varchar(3)			COMMENT '댓글 수정 여부'
-	, created_at 	datetime			COMMENT '댓글 생성 날짜'
-	, modified_at 	datetime			COMMENT '댓글 수정 날짜'
+	, created_at 	datetime			COMMENT '가입 날짜'
+	, updated_at 	datetime			COMMENT '정보 수정 날짜'
+	, deleted_at 	datetime			COMMENT '삭제 날짜'
 	, primary key(reply_id)
 ) COMMENT '게시글 댓글 테이블'
 ; 
-
-DROP TABLE IF EXISTS user_tokens;
-
-CREATE TABLE user_tokens (
-    token_id bigint auto_increment			COMMENT '자동생성 토큰번호'
-    , register_number int					COMMENT '유저 등록 번호(pk)'
-    , token TEXT NOT NULL					COMMENT '토큰'
-    , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
-    , created_at 	datetime				COMMENT '토큰 생성 날짜'
-	, updated_at 	datetime				COMMENT '토큰 수정 날짜'
-	, deleted_at 	datetime				COMMENT '토큰 삭제 날짜'
-    , primary key(token_id)
-);
