@@ -9,7 +9,6 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -17,8 +16,8 @@ const True string = "y"
 const False string = "n"
 const TokenExpirationHour = 12
 
-type DBORM struct {
-	*gorm.DB
+type UserRepository struct {
+	db *gorm.DB
 }
 
 type Bool struct {
@@ -30,6 +29,10 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
+func NewUserRepository(db *gorm.DB) *UserRepository {
+	return &UserRepository{db}
+}
+
 func generateRandomKey(length int) (string, error) {
 	key := make([]byte, length)
 	_, err := rand.Read(key)
@@ -39,21 +42,12 @@ func generateRandomKey(length int) (string, error) {
 	return base64.URLEncoding.EncodeToString(key), nil
 }
 
-func DBConnection() (*DBORM, error) {
-	// connection := "test:test1234@tcp(127.0.0.1:3306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
-	connection := "test:test1234@tcp(127.0.0.1:13306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})
-	return &DBORM{
-		DB: db,
-	}, err
-}
-
-func (db *DBORM) AddUser(user Users) (Users, error) {
+func (r *UserRepository) AddUser(user Users) (Users, error) {
 	fmt.Println("dblayer AddUser")
 
 	var hasUserCount int64
 
-	db.Table("users").
+	r.db.Table("users").
 		Where(&Users{Email: user.Email}).
 		Or(&Users{Nickname: user.Nickname}).
 		Count(&hasUserCount)
@@ -68,7 +62,7 @@ func (db *DBORM) AddUser(user Users) (Users, error) {
 	user.LoggedIn = True
 	hashPassword(&user.Password)
 	fmt.Println(user)
-	return user, db.Omit("register_number").Create(&user).Error
+	return user, r.db.Omit("register_number").Create(&user).Error
 }
 
 func hashPassword(password *string) error {
@@ -86,18 +80,18 @@ func hashPassword(password *string) error {
 	return nil
 }
 
-func (db *DBORM) addToken(registerNumber int32) (Tokens, error) {
+func (r *UserRepository) addToken(registerNumber int32) (Tokens, error) {
 	token, err := GenerateToken(registerNumber)
 	if err != nil {
 		return token, err
 	}
 
-	return token, db.Omit("token_id").Create(&token).Error
+	return token, r.db.Omit("token_id").Create(&token).Error
 }
 
-func (db *DBORM) getToken(registerNumber int32) (Tokens, error) {
+func (r *UserRepository) getToken(registerNumber int32) (Tokens, error) {
 	var token Tokens
-	result := db.Table("user_tokens").
+	result := r.db.Table("user_tokens").
 		Where(&Tokens{RegisterNumber: registerNumber}).
 		Order("token_id DESC").
 		Limit(1).
@@ -114,7 +108,7 @@ func (db *DBORM) getToken(registerNumber int32) (Tokens, error) {
 		return token, err
 	}
 
-	token, err = db.addToken(registerNumber)
+	token, err = r.addToken(registerNumber)
 	if err != nil {
 		return token, err
 	}
@@ -151,11 +145,11 @@ func GenerateToken(registerNumber int32) (Tokens, error) {
 	}, nil
 }
 
-func (db *DBORM) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
+func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
 	var user Users
 	var userCount int64
 
-	result := db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
+	result := r.db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
 		return UserResponseDto{}, result.Error
 	}
@@ -169,7 +163,7 @@ func (db *DBORM) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, err
 		return UserResponseDto{}, errors.New("Invalid password")
 	}
 
-	token, err := db.getToken(user.RegisterNumber)
+	token, err := r.getToken(user.RegisterNumber)
 	if err != nil {
 		return UserResponseDto{}, err
 	}
@@ -191,11 +185,11 @@ func checkPassword(existingHash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(existingHash), []byte(password)) == nil
 }
 
-func (db *DBORM) ChangePassword(userRequestDto UserRequestDto) (UserResponseDto, error) {
+func (r *UserRepository) ChangePassword(userRequestDto UserRequestDto) (UserResponseDto, error) {
 	var user Users
 	var userCount int64
 
-	result := db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
+	result := r.db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
 		return UserResponseDto{}, result.Error
 	}
@@ -207,7 +201,7 @@ func (db *DBORM) ChangePassword(userRequestDto UserRequestDto) (UserResponseDto,
 
 	hashPassword(&user.Password)
 
-	err := db.Model(&user).
+	err := r.db.Model(&user).
 		Where(&Users{Email: userRequestDto.Email}).
 		Update("password", user.Password).Error
 	if err != nil {

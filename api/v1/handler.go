@@ -3,16 +3,17 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"si-community/config"
 	user "si-community/users"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	db user.DBlayer
+	userRepsitory user.UserRepository
 }
 
-func addTestData(dbConn user.DBlayer) {
+func addTestData(userRepository user.UserRepository) {
 	user := user.Users{
 		Email:    "test@gmail.com",
 		Password: "test1234",
@@ -20,24 +21,20 @@ func addTestData(dbConn user.DBlayer) {
 		Company:  "keke",
 	}
 
-	dbConn.AddUser(user)
+	userRepository.AddUser(user)
 }
 
 func NewHandler() (*Handler, error) {
-	dbConn, err := user.DBConnection()
+	dbConn, err := config.DBConnection()
 	if err != nil {
 		fmt.Println("DBConn error")
 		return nil, err
 	}
 	handler := new(Handler)
-	handler.db = dbConn
+	handler.userRepsitory = *user.NewUserRepository(dbConn)
 
-	addTestData(dbConn)
+	addTestData(handler.userRepsitory)
 	return handler, nil
-}
-
-func NewHandlerWithDB(db user.DBlayer) HandlerInterface {
-	return &Handler{db: db}
 }
 
 // @Description 회원 가입
@@ -48,11 +45,6 @@ func NewHandlerWithDB(db user.DBlayer) HandlerInterface {
 // @Router /v1/users [post]
 // @Success 201 {object} user.Users
 func (h *Handler) AddUser(c *gin.Context) {
-	if h.db == nil {
-		fmt.Println("DB is nil")
-		return
-	}
-
 	var user user.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
 		fmt.Println("ShouldBindJSON error")
@@ -61,7 +53,7 @@ func (h *Handler) AddUser(c *gin.Context) {
 		return
 	}
 
-	user, err := h.db.AddUser(user)
+	user, err := h.userRepsitory.AddUser(user)
 	if err != nil {
 		fmt.Println("db add user error")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -79,11 +71,6 @@ func (h *Handler) AddUser(c *gin.Context) {
 // @Router /v1/users/signin [post]
 // @Success 201 {object} user.Users
 func (h *Handler) SignIn(c *gin.Context) {
-	if h.db == nil {
-		fmt.Println("DB is nil")
-		return
-	}
-
 	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
 	if err != nil {
@@ -91,7 +78,7 @@ func (h *Handler) SignIn(c *gin.Context) {
 		return
 	}
 
-	userResponseDto, err := h.db.SignInUser(userRequestDto)
+	userResponseDto, err := h.userRepsitory.SignInUser(userRequestDto)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -109,11 +96,6 @@ func (h *Handler) SignIn(c *gin.Context) {
 // @Router /v1/users/changePassword [post]
 // @Success 201 {object} user.Users
 func (h *Handler) ChangePassword(c *gin.Context) {
-	if h.db == nil {
-		fmt.Println("DB is nil")
-		return
-	}
-
 	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
 	if err != nil {
@@ -121,7 +103,7 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	userResponseDto, err := h.db.ChangePassword(userRequestDto)
+	userResponseDto, err := h.userRepsitory.ChangePassword(userRequestDto)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -132,33 +114,6 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 
 }
 
-// @Description 비밀번호 변경
-// @name ChangePassword
-// @Accept  json
-// @Produce  json
-// @Param users body user.Users true "비밀번호 변경 input"
-// @Router /v1/users/changePassword [post]
-// @Success 201 {object} user.Users
 func (h *Handler) AddArticle(c *gin.Context) {
-	// if h.db == nil {
-	// 	fmt.Println("DB is nil")
-	// 	return
-	// }
-
-	// var userRequestDto user.UserRequestDto
-	// err := c.ShouldBindJSON(&userRequestDto)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
-
-	// userResponseDto, err := h.db.ChangePassword(userRequestDto)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 	return
-	// }
-	// c.JSON(http.StatusOK, userResponseDto)
-
-	// return
-
+	return
 }

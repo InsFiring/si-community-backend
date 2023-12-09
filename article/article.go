@@ -2,7 +2,7 @@ package article
 
 import "gorm.io/gorm"
 
-type Article struct {
+type Articles struct {
 	gorm.Model
 	ArticleId  int32  `gorm:"column:article_id" json:"article_id"`
 	Nickname   string `gorm:"column:nickname" json:"nickname"`
@@ -16,6 +16,6 @@ type Article struct {
 	IsModified string `gorm:"column:is_modified" json:"is_modified"`
 }
 
-func (Article) TableName() string {
+func (Articles) TableName() string {
 	return "articles"
 }
