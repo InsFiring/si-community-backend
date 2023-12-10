@@ -35,3 +35,12 @@ func (r *ArticleRepository) AddArticle(articleRequestDto ArticleRequestDto) (Art
 
 	return article, r.db.Omit("article_id").Create(&article).Error
 }
+
+func (r *ArticleRepository) GetArticles() []Articles {
+	fmt.Println("ArticleRepository GetArticles")
+
+	var articles []Articles
+	r.db.Table("articles").Find(&articles)
+
+	return articles
+}

@@ -15,7 +15,7 @@ type Handler struct {
 	articleRepository article.ArticleRepository
 }
 
-func addTestData(userRepository user.UserRepository) {
+func addTestUser(userRepository user.UserRepository) {
 	user := user.Users{
 		Email:    "test@gmail.com",
 		Password: "test1234",
@@ -24,6 +24,21 @@ func addTestData(userRepository user.UserRepository) {
 	}
 
 	userRepository.AddUser(user)
+}
+
+func addTestArticle(articleRepository article.ArticleRepository) {
+	articleRequestDto := article.ArticleRequestDto{
+		Ratings:  5,
+		Title:    "이건제목",
+		Contents: "글 내용입니다.",
+		Nickname: "test",
+		Company:  "keke",
+	}
+
+	articles := articleRepository.GetArticles()
+	if len(articles) == 0 {
+		articleRepository.AddArticle(articleRequestDto)
+	}
 }
 
 func NewHandler() (*Handler, error) {
@@ -36,7 +51,9 @@ func NewHandler() (*Handler, error) {
 	handler.userRepsitory = *user.NewUserRepository(dbConn)
 	handler.articleRepository = *article.NewArticleRepository(dbConn)
 
-	addTestData(handler.userRepsitory)
+	addTestUser(handler.userRepsitory)
+	addTestArticle(handler.articleRepository)
+
 	return handler, nil
 }
 
@@ -127,10 +144,17 @@ func (h *Handler) AddArticle(c *gin.Context) {
 
 	article, err := h.articleRepository.AddArticle(articleRequestDto)
 	if err != nil {
-		fmt.Println("db add user error")
+		fmt.Println("db add article error")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusCreated, article)
+}
+
+// TODO: 페이지네이션 처리 필요
+func (h *Handler) GetArticles(c *gin.Context) {
+	articles := h.articleRepository.GetArticles()
+
+	c.JSON(http.StatusOK, articles)
 }

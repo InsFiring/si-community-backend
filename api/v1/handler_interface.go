@@ -9,4 +9,5 @@ type HandlerInterface interface {
 	SignIn(c *gin.Context)
 	ChangePassword(c *gin.Context)
 	AddArticle(c *gin.Context)
+	GetArticles(c *gin.Context)
 }
