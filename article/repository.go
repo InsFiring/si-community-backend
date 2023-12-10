@@ -1,6 +1,14 @@
 package article
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+
+	"gorm.io/gorm"
+)
+
+const True string = "y"
+const False string = "n"
+const DefaultCount = 0
 
 type ArticleRepository struct {
 	db *gorm.DB
@@ -8,4 +16,22 @@ type ArticleRepository struct {
 
 func NewArticleRepository(db *gorm.DB) *ArticleRepository {
 	return &ArticleRepository{db}
+}
+
+func (r *ArticleRepository) AddArticle(articleRequestDto ArticleRequestDto) (Articles, error) {
+	fmt.Println("ArticleRepository AddArticle")
+
+	article := Articles{
+		Nickname:   articleRequestDto.Nickname,
+		Company:    articleRequestDto.Company,
+		Ratings:    articleRequestDto.Ratings,
+		Title:      articleRequestDto.Title,
+		Contents:   articleRequestDto.Contents,
+		ViewCounts: DefaultCount,
+		Likes:      DefaultCount,
+		Unlikes:    DefaultCount,
+		IsModified: False,
+	}
+
+	return article, r.db.Omit("article_id").Create(&article).Error
 }

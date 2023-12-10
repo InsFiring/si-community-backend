@@ -1,5 +1,5 @@
 package article
 
 type Dblayer interface {
-	AddArticle() (Articles, error)
+	AddArticle(articleRequestDto ArticleRequestDto) (Articles, error)
 }

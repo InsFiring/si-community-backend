@@ -19,3 +19,11 @@ type Articles struct {
 func (Articles) TableName() string {
 	return "articles"
 }
+
+type ArticleRequestDto struct {
+	Ratings  int32  `json:"ratings"`
+	Title    string `json:"title"`
+	Contents string `json:"contents"`
+	Nickname string `json:"nickname"`
+	Company  string `json:"company"`
+}

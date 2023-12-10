@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"si-community/article"
 	"si-community/config"
 	user "si-community/users"
 
@@ -10,7 +11,8 @@ import (
 )
 
 type Handler struct {
-	userRepsitory user.UserRepository
+	userRepsitory     user.UserRepository
+	articleRepository article.ArticleRepository
 }
 
 func addTestData(userRepository user.UserRepository) {
@@ -32,6 +34,7 @@ func NewHandler() (*Handler, error) {
 	}
 	handler := new(Handler)
 	handler.userRepsitory = *user.NewUserRepository(dbConn)
+	handler.articleRepository = *article.NewArticleRepository(dbConn)
 
 	addTestData(handler.userRepsitory)
 	return handler, nil
@@ -115,5 +118,19 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 }
 
 func (h *Handler) AddArticle(c *gin.Context) {
-	return
+	var articleRequestDto article.ArticleRequestDto
+	err := c.ShouldBindJSON(&articleRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article, err := h.articleRepository.AddArticle(articleRequestDto)
+	if err != nil {
+		fmt.Println("db add user error")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, article)
 }
