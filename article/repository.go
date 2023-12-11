@@ -132,3 +132,31 @@ func (r *ArticleRepository) PlusLike(articleId int32) (Articles, error) {
 
 	return article, nil
 }
+
+func (r *ArticleRepository) CancelLike(articleId int32) (Articles, error) {
+	fmt.Println("ArticleRepository PlusLike")
+
+	var article Articles
+	var count int64
+
+	result := r.db.Table("articles").
+		Where(&Articles{ArticleId: articleId}).
+		Find(&article)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return article, err
+	}
+
+	if count == 0 {
+		return article, errors.New("글이 없습니다.")
+	}
+
+	article.Likes -= 1
+
+	result.Update("likes", article.Likes)
+
+	return article, nil
+}
