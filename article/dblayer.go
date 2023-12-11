@@ -7,4 +7,5 @@ type Dblayer interface {
 	ModifyArticle(articleModifyDto ArticleModifyDto)
 	PlusLike(articleId int32) (Articles, error)
 	CancelLike(articleId int32) (Articles, error)
+	PlusUnlike(articleId int32) (Articles, error)
 }

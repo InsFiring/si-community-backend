@@ -230,3 +230,21 @@ func (h *Handler) CancelLike(c *gin.Context) {
 
 	c.JSON(http.StatusOK, article)
 }
+
+func (h *Handler) PlusUnlike(c *gin.Context) {
+	paramId := c.Param("id")
+	articleId, err := strconv.Atoi(paramId)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article, err := h.articleRepository.PlusUnlike(int32(articleId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, article)
+}
