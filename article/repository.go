@@ -73,3 +73,34 @@ func (r *ArticleRepository) GetArticleById(articleId int32) (Articles, error) {
 
 	return article, nil
 }
+
+func (r *ArticleRepository) ModifyArticle(articleModifyDto ArticleModifyDto) (Articles, error) {
+	fmt.Println("ArticleRepository ModifyArticle")
+
+	var article Articles
+	var count int64
+
+	result := r.db.Table("articles").
+		Where(&Articles{ArticleId: articleModifyDto.ArticleId}).
+		Find(&article)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return article, err
+	}
+
+	if count == 0 {
+		return article, errors.New("글이 없습니다.")
+	}
+
+	article.Ratings = articleModifyDto.Ratings
+	article.Title = articleModifyDto.Title
+	article.Contents = articleModifyDto.Contents
+	article.IsModified = True
+
+	r.db.Updates(article)
+
+	return article, nil
+}

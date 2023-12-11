@@ -11,4 +11,5 @@ type HandlerInterface interface {
 	AddArticle(c *gin.Context)
 	GetArticles(c *gin.Context)
 	GetArticleById(c *gin.Context)
+	ModifyArticle(c *gin.Context)
 }

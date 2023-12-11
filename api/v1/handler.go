@@ -177,3 +177,20 @@ func (h *Handler) GetArticleById(c *gin.Context) {
 
 	c.JSON(http.StatusOK, article)
 }
+
+func (h *Handler) ModifyArticle(c *gin.Context) {
+	var articleModifyDto article.ArticleModifyDto
+	err := c.ShouldBindJSON(&articleModifyDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article, err := h.articleRepository.ModifyArticle(articleModifyDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, article)
+}

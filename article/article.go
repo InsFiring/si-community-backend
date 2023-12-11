@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Articles struct {
 	gorm.Model
-	ArticleId  int32  `gorm:"column:article_id" json:"article_id"`
+	ArticleId  int32  `gorm:"primaryKey;column:article_id" json:"article_id"`
 	Nickname   string `gorm:"column:nickname" json:"nickname"`
 	Company    string `gorm:"column:company" json:"company"`
 	Ratings    int32  `gorm:"column:ratings" json:"ratings"`
@@ -26,4 +26,11 @@ type ArticleRequestDto struct {
 	Contents string `json:"contents"`
 	Nickname string `json:"nickname"`
 	Company  string `json:"company"`
+}
+
+type ArticleModifyDto struct {
+	ArticleId int32  `json:"article_id"`
+	Ratings   int32  `json:"ratings"`
+	Title     string `json:"title"`
+	Contents  string `json:"contents"`
 }
