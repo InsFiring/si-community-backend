@@ -1,6 +1,7 @@
 package article
 
 import (
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -43,4 +44,32 @@ func (r *ArticleRepository) GetArticles() []Articles {
 	r.db.Table("articles").Find(&articles)
 
 	return articles
+}
+
+func (r *ArticleRepository) GetArticleById(articleId int32) (Articles, error) {
+	fmt.Println("ArticleRepository GetArticleById")
+
+	var article Articles
+	var count int64
+
+	result := r.db.Table("articles").
+		Where(&Articles{ArticleId: articleId}).
+		Find(&article)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return article, err
+	}
+
+	if count == 0 {
+		return article, errors.New("글이 없습니다.")
+	}
+
+	article.ViewCounts += 1
+
+	result.Update("view_counts", article.ViewCounts)
+
+	return article, nil
 }

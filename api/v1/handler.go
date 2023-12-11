@@ -6,6 +6,7 @@ import (
 	"si-community/article"
 	"si-community/config"
 	user "si-community/users"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -157,4 +158,22 @@ func (h *Handler) GetArticles(c *gin.Context) {
 	articles := h.articleRepository.GetArticles()
 
 	c.JSON(http.StatusOK, articles)
+}
+
+func (h *Handler) GetArticleById(c *gin.Context) {
+	paramId := c.Param("id")
+	articleId, err := strconv.Atoi(paramId)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article, err := h.articleRepository.GetArticleById(int32(articleId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, article)
 }
