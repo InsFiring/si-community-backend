@@ -5,4 +5,6 @@ type Dblayer interface {
 	GetArticles() ([]Articles, error)
 	GetArticleById(articleId int32) (Articles, error)
 	ModifyArticle(articleModifyDto ArticleModifyDto)
+	PlusLike(articleId int32) (Articles, error)
+	CancelLike(articleId int32) (Articles, error)
 }

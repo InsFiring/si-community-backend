@@ -12,4 +12,5 @@ type HandlerInterface interface {
 	GetArticles(c *gin.Context)
 	GetArticleById(c *gin.Context)
 	ModifyArticle(c *gin.Context)
+	PlusLike(c *gin.Context)
 }
