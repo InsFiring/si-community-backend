@@ -238,6 +238,5 @@ func (r *ArticleRepository) DeleteArticle(articleId int32) (int32, error) {
 		return articleId, errors.New("글이 없습니다.")
 	}
 
-	// return articleId, r.db.Where("article_id = ?", articleId).Delete(&Articles{}).Error
 	return articleId, r.db.Where(&Articles{ArticleId: articleId}).Delete(&Articles{}).Error
 }
