@@ -266,3 +266,21 @@ func (h *Handler) CancelUnlike(c *gin.Context) {
 
 	c.JSON(http.StatusOK, article)
 }
+
+func (h *Handler) DeleteArticle(c *gin.Context) {
+	paramId := c.Param("id")
+	articleId, err := strconv.Atoi(paramId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	id, err := h.articleRepository.DeleteArticle(int32(articleId))
+	if err != nil {
+		fmt.Println("Delete result error")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, id)
+}

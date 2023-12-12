@@ -38,6 +38,7 @@ func RunApiWithHandler(address string, handler HandlerInterface) error {
 	r.GET(BASEPATH+"/article/:id/cancel_like", handler.CancelLike)
 	r.GET(BASEPATH+"/article/:id/unlike", handler.PlusUnlike)
 	r.GET(BASEPATH+"/article/:id/cancel_unlike", handler.CancelUnlike)
+	r.DELETE(BASEPATH+"/article/:id", handler.DeleteArticle)
 
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

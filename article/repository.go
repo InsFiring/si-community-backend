@@ -190,7 +190,7 @@ func (r *ArticleRepository) PlusUnlike(articleId int32) (Articles, error) {
 }
 
 func (r *ArticleRepository) CancelUnlike(articleId int32) (Articles, error) {
-	fmt.Println("ArticleRepository PlusLike")
+	fmt.Println("ArticleRepository CancelUnlike")
 
 	var article Articles
 	var count int64
@@ -215,4 +215,29 @@ func (r *ArticleRepository) CancelUnlike(articleId int32) (Articles, error) {
 	result.Update("unlikes", article.Unlikes)
 
 	return article, nil
+}
+
+func (r *ArticleRepository) DeleteArticle(articleId int32) (int32, error) {
+	fmt.Println("ArticleRepository DeleteArticle")
+
+	var article Articles
+	var count int64
+
+	result := r.db.Table("articles").
+		Where(&Articles{ArticleId: articleId}).
+		Find(&article)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return articleId, err
+	}
+
+	if count == 0 {
+		return articleId, errors.New("글이 없습니다.")
+	}
+
+	// return articleId, r.db.Where("article_id = ?", articleId).Delete(&Articles{}).Error
+	return articleId, r.db.Where(&Articles{ArticleId: articleId}).Delete(&Articles{}).Error
 }

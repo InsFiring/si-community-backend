@@ -9,4 +9,5 @@ type Dblayer interface {
 	CancelLike(articleId int32) (Articles, error)
 	PlusUnlike(articleId int32) (Articles, error)
 	CancelUnlike(articleId int32) (Articles, error)
+	DeleteArticle(articleId int32) (int32, error)
 }
