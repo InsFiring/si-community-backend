@@ -44,6 +44,26 @@ func addTestArticle(articleRepository article.ArticleRepository) {
 	}
 }
 
+func addTestArticleReplies(articleReplyRepository articlereply.ArticleReplyRepository) {
+	articleRepliyRequestDto1 := articlereply.ArticleReplyRequestDto{
+		ArticleId: 1,
+		Nickname:  "dori",
+		Contents:  "괜찮은 글이군요.",
+	}
+
+	articleRepliyRequestDto2 := articlereply.ArticleReplyRequestDto{
+		ArticleId: 1,
+		Nickname:  "neo",
+		Contents:  "도움이 많이 됐습니다 ㅎㅎ",
+	}
+
+	articleReplies, err := articleReplyRepository.GetArticleRepliesByArticleId(int32(1))
+	if err != nil && len(articleReplies) == 0 {
+		articleReplyRepository.AddArticleReply(articleRepliyRequestDto1)
+		articleReplyRepository.AddArticleReply(articleRepliyRequestDto2)
+	}
+}
+
 func NewHandler() (*Handler, error) {
 	dbConn, err := config.DBConnection()
 	if err != nil {
@@ -57,6 +77,7 @@ func NewHandler() (*Handler, error) {
 
 	addTestUser(handler.userRepsitory)
 	addTestArticle(handler.articleRepository)
+	addTestArticleReplies(handler.articleReplyRepository)
 
 	return handler, nil
 }
