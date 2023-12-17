@@ -137,3 +137,31 @@ func (r *ArticleReplyRepository) CancelReplyLike(articleId int32, replyId int32)
 
 	return articleReplies, nil
 }
+
+func (r *ArticleReplyRepository) PlusReplyUnlike(articleId int32, replyId int32) (ArticleReplies, error) {
+	var articleReplies ArticleReplies
+	var count int64
+
+	result := r.db.Table("article_replies").
+		Where(&ArticleReplies{
+			ArticleId: articleId,
+			ReplyId:   replyId}).
+		Find(&articleReplies)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return articleReplies, err
+	}
+
+	if count == 0 {
+		return articleReplies, errors.New("댓글이 없습니다.")
+	}
+
+	articleReplies.Unlikes += 1
+
+	result.Update("unlikes", articleReplies.Unlikes)
+
+	return articleReplies, nil
+}
