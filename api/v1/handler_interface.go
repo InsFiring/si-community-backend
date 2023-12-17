@@ -24,4 +24,5 @@ type HandlerInterface interface {
 	CancelReplyLike(c *gin.Context)
 	PlusReplyUnlike(c *gin.Context)
 	CancelReplyUnlike(c *gin.Context)
+	DeleteArticleReply(c *gin.Context)
 }

@@ -193,3 +193,30 @@ func (r *ArticleReplyRepository) CancelReplyUnlike(articleId int32, replyId int3
 
 	return articleReplies, nil
 }
+
+func (r *ArticleReplyRepository) DeleteArticleReply(articleId int32, replyId int32) (int32, error) {
+	var articleReplies ArticleReplies
+	var count int64
+
+	result := r.db.Table("article_replies").
+		Where(&ArticleReplies{
+			ArticleId: articleId,
+			ReplyId:   replyId}).
+		Find(&articleReplies)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return replyId, err
+	}
+
+	if count == 0 {
+		return replyId, errors.New("댓글이 없습니다.")
+	}
+
+	return replyId, r.db.Where(&ArticleReplies{
+		ArticleId: articleId,
+		ReplyId:   replyId}).
+		Delete(&ArticleReplies{}).Error
+}
