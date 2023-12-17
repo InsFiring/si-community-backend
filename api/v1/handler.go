@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"si-community/article"
+	articlereply "si-community/article_reply"
 	"si-community/config"
 	user "si-community/users"
 	"strconv"
@@ -12,8 +13,9 @@ import (
 )
 
 type Handler struct {
-	userRepsitory     user.UserRepository
-	articleRepository article.ArticleRepository
+	userRepsitory          user.UserRepository
+	articleRepository      article.ArticleRepository
+	articleReplyRepository articlereply.ArticleReplyRepository
 }
 
 func addTestUser(userRepository user.UserRepository) {
@@ -51,6 +53,7 @@ func NewHandler() (*Handler, error) {
 	handler := new(Handler)
 	handler.userRepsitory = *user.NewUserRepository(dbConn)
 	handler.articleRepository = *article.NewArticleRepository(dbConn)
+	handler.articleReplyRepository = *articlereply.NewArticleReplyRepository(dbConn)
 
 	addTestUser(handler.userRepsitory)
 	addTestArticle(handler.articleRepository)
@@ -283,4 +286,22 @@ func (h *Handler) DeleteArticle(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, id)
+}
+
+func (h *Handler) AddArticleReply(c *gin.Context) {
+	var articleReplyRequestDto articlereply.ArticleReplyRequestDto
+
+	err := c.ShouldBindJSON(&articleReplyRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	h.articleReplyRepository.AddArticleReply(articleReplyRequestDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, articleReplyRequestDto)
 }
