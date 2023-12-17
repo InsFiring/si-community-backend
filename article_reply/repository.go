@@ -52,3 +52,32 @@ func (r *ArticleReplyRepository) GetArticleRepliesByArticleId(articleId int32) (
 
 	return articleReplies, nil
 }
+
+func (r *ArticleReplyRepository) ModifyArticleReply(articleReplyModifyDto ArticleReplyModifyDto) (ArticleReplies, error) {
+	var articleReply ArticleReplies
+	var count int64
+
+	result := r.db.Table("article_replies").
+		Where(&ArticleReplies{
+			ArticleId: articleReplyModifyDto.ArticleId,
+			ReplyId:   articleReply.ReplyId}).
+		Find(&articleReply)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return articleReply, err
+	}
+
+	if count == 0 {
+		return articleReply, errors.New("댓글이 없습니다.")
+	}
+
+	articleReply.Contents = articleReplyModifyDto.Contents
+	articleReply.IsModified = True
+
+	r.db.Updates(articleReply)
+
+	return articleReply, nil
+}

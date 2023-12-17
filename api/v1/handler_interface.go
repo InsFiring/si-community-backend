@@ -19,4 +19,5 @@ type HandlerInterface interface {
 	DeleteArticle(c *gin.Context)
 	AddArticleReply(c *gin.Context)
 	GetArticleRepliesByArticleId(c *gin.Context)
+	ModifyArticleReply(c *gin.Context)
 }

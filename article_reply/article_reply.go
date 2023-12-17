@@ -22,3 +22,9 @@ type ArticleReplyRequestDto struct {
 	Nickname  string `gorm:"column:nickname" json:"nickname"`
 	Contents  string `gorm:"column:contents" json:"contents"`
 }
+
+type ArticleReplyModifyDto struct {
+	ReplyId   int32  `gorm:"primaryKey;column:reply_id" json:"reply_id"`
+	ArticleId int32  `gorm:"column:article_id" json:"article_id"`
+	Contents  string `gorm:"column:contents" json:"contents"`
+}

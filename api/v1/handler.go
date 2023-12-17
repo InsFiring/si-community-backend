@@ -344,3 +344,20 @@ func (h *Handler) GetArticleRepliesByArticleId(c *gin.Context) {
 
 	c.JSON(http.StatusOK, articleReplies)
 }
+
+func (h *Handler) ModifyArticleReply(c *gin.Context) {
+	var articleReplyModifyDto articlereply.ArticleReplyModifyDto
+	err := c.ShouldBindJSON(&articleReplyModifyDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	articleReply, err := h.articleReplyRepository.ModifyArticleReply(articleReplyModifyDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, articleReply)
+}
