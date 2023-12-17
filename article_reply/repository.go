@@ -81,3 +81,31 @@ func (r *ArticleReplyRepository) ModifyArticleReply(articleReplyModifyDto Articl
 
 	return articleReply, nil
 }
+
+func (r *ArticleReplyRepository) PlusReplyLike(articleId int32, replyId int32) (ArticleReplies, error) {
+	var articleReplies ArticleReplies
+	var count int64
+
+	result := r.db.Table("article_replies").
+		Where(&ArticleReplies{
+			ArticleId: articleId,
+			ReplyId:   replyId}).
+		Find(&articleReplies)
+
+	result.Count(&count)
+
+	err := result.Error
+	if err != nil {
+		return articleReplies, err
+	}
+
+	if count == 0 {
+		return articleReplies, errors.New("댓글이 없습니다.")
+	}
+
+	articleReplies.Likes += 1
+
+	result.Updates(articleReplies)
+
+	return articleReplies, nil
+}

@@ -43,6 +43,7 @@ func RunApiWithHandler(address string, handler HandlerInterface) error {
 	r.POST(BASEPATH+"/article_reply", handler.AddArticleReply)
 	r.GET(BASEPATH+"/article/:id/article_replies", handler.GetArticleRepliesByArticleId)
 	r.PUT(BASEPATH+"/article/:id/article_replies/:reply_id", handler.ModifyArticleReply)
+	r.GET(BASEPATH+"/article/:id/article_replies/:reply_id/like", handler.PlusReplyLike)
 
 	docs.SwaggerInfo.BasePath = "/"
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

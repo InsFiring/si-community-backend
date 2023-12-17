@@ -361,3 +361,28 @@ func (h *Handler) ModifyArticleReply(c *gin.Context) {
 
 	c.JSON(http.StatusOK, articleReply)
 }
+
+func (h *Handler) PlusReplyLike(c *gin.Context) {
+	paramId := c.Param("id")
+	paramReplyId := c.Param("reply_id")
+
+	articleId, err := strconv.Atoi(paramId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	replyId, err := strconv.Atoi(paramReplyId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	articleReply, err := h.articleReplyRepository.PlusReplyLike(int32(articleId), int32(replyId))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, articleReply)
+}
