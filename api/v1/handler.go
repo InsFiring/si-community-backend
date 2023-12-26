@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"si-community/article"
 	articlereply "si-community/article_reply"
-	"si-community/config"
 	user "si-community/users"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type Handler struct {
@@ -64,12 +64,7 @@ func addTestArticleReplies(articleReplyRepository articlereply.ArticleReplyRepos
 	}
 }
 
-func NewHandler(tomlConfig config.Config) (*Handler, error) {
-	dbConn, err := config.DBConnection(tomlConfig)
-	if err != nil {
-		fmt.Println("DBConn error")
-		return nil, err
-	}
+func NewHandler(dbConn *gorm.DB) (*Handler, error) {
 	handler := new(Handler)
 	handler.userRepsitory = *user.NewUserRepository(dbConn)
 	handler.articleRepository = *article.NewArticleRepository(dbConn)

@@ -13,7 +13,7 @@ import (
 
 var (
 	configPath string
-	tomlConfig config.Config
+	tomlConfig config.TomlConfig
 )
 
 func init() {
@@ -43,6 +43,12 @@ func argumentParser() {
 // @host localhost:8000
 // @BasePath /v1
 func main() {
+	dbConn, err := config.DBConnection(tomlConfig)
+	if err != nil {
+		fmt.Errorf("DBConn error: ", err)
+		return
+	}
+
 	log.Println("Main log...")
-	log.Fatal(rest.RunAPI("127.0.0.1:8000", tomlConfig))
+	log.Fatal(rest.RunAPI("127.0.0.1:8000", dbConn))
 }

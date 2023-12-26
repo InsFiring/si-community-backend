@@ -7,10 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Config struct {
-	Database DBConfig
-}
-
 type DBConfig struct {
 	Server   string
 	Port     int
@@ -19,7 +15,7 @@ type DBConfig struct {
 	Password string
 }
 
-func DBConnection(tomlConfig Config) (*gorm.DB, error) {
+func DBConnection(tomlConfig TomlConfig) (*gorm.DB, error) {
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		tomlConfig.Database.User, tomlConfig.Database.Password, tomlConfig.Database.Server, tomlConfig.Database.Port, tomlConfig.Database.Dbname)
 	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})

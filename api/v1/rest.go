@@ -1,16 +1,16 @@
 package api
 
 import (
-	"si-community/config"
 	docs "si-community/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"gorm.io/gorm"
 )
 
-func RunAPI(address string, tomlConfig config.Config) error {
-	handler, err := NewHandler(tomlConfig)
+func RunAPI(address string, dbConn *gorm.DB) error {
+	handler, err := NewHandler(dbConn)
 	if err != nil {
 		return err
 	}
