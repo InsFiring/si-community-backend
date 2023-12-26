@@ -1,6 +1,7 @@
 package api
 
 import (
+	"si-community/config"
 	docs "si-community/docs"
 
 	"github.com/gin-gonic/gin"
@@ -8,8 +9,8 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func RunAPI(address string) error {
-	handler, err := NewHandler()
+func RunAPI(address string, tomlConfig config.Config) error {
+	handler, err := NewHandler(tomlConfig)
 	if err != nil {
 		return err
 	}

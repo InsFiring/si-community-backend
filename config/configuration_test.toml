@@ -1,0 +1,6 @@
+[Database]
+server = "127.0.0.1"
+port = 13306
+dbname = "si_community"
+user = "test"
+password = "test1234"

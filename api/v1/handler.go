@@ -64,8 +64,8 @@ func addTestArticleReplies(articleReplyRepository articlereply.ArticleReplyRepos
 	}
 }
 
-func NewHandler() (*Handler, error) {
-	dbConn, err := config.DBConnection()
+func NewHandler(tomlConfig config.Config) (*Handler, error) {
+	dbConn, err := config.DBConnection(tomlConfig)
 	if err != nil {
 		fmt.Println("DBConn error")
 		return nil, err

@@ -1,13 +1,28 @@
 package config
 
 import (
+	"fmt"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func DBConnection() (*gorm.DB, error) {
-	// connection := "test:test1234@tcp(127.0.0.1:3306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
-	connection := "test:test1234@tcp(127.0.0.1:13306)/si_community?charset=utf8mb4&parseTime=True&loc=Local"
+type Config struct {
+	Database DBConfig
+}
+
+type DBConfig struct {
+	Server   string
+	Port     int
+	Dbname   string
+	User     string
+	Password string
+}
+
+func DBConnection(tomlConfig Config) (*gorm.DB, error) {
+	connection := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		tomlConfig.Database.User, tomlConfig.Database.Password, tomlConfig.Database.Server, tomlConfig.Database.Port, tomlConfig.Database.Dbname)
 	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})
+
 	return db, err
 }
