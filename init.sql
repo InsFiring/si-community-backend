@@ -10,6 +10,7 @@ CREATE TABLE users (
 	, password		varchar(255)		COMMENT '패스워드'
 	, nickname 		varchar(50) 		COMMENT '유저 닉네임'
 	, company 		varchar(100)		COMMENT '회사'
+    , is_admin 		varchar(3)		    COMMENT '회사 관계자여부'
 	, is_active 	varchar(3)			COMMENT '계정활성화 상태 - 탈퇴 여부'
 	, loggedin 		varchar(3)			COMMENT	'로그인 상태'
 	, created_at 	datetime			COMMENT '가입 날짜'
@@ -17,7 +18,6 @@ CREATE TABLE users (
 	, deleted_at 	datetime			COMMENT '삭제 날짜'
 	, primary key(register_number)
 	, unique(email)
-	, unique(nickname)
 ) COMMENT '회원 정보 테이블'
 ;
 

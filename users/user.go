@@ -11,6 +11,7 @@ type Users struct {
 	Password       string `gorm:"column:password" json:"password"`
 	Nickname       string `gorm:"column:nickname" json:"nickname"`
 	Company        string `gorm:"column:company" json:"company"`
+	IsAdmin        string `gorm:"column:is_admin" json:"is_admin"`
 	IsActive       string `gorm:"column:is_active" json:"is_active"`
 	LoggedIn       string `gorm:"column:loggedin" json:"loggedin"`
 }

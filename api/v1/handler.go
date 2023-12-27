@@ -24,6 +24,7 @@ func addTestUser(userRepository user.UserRepository) {
 		Password: "test1234",
 		Nickname: "test",
 		Company:  "keke",
+		IsAdmin:  "n",
 	}
 
 	userRepository.AddUser(user)
