@@ -1,8 +1,6 @@
 package user
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -27,28 +25,10 @@ type UserRequestDto struct {
 }
 
 type UserResponseDto struct {
-	RegisterNumber int32     `json:"register_number"`
-	Email          string    `json:"email"`
-	Nickname       string    `json:"nickname"`
-	Company        string    `json:"company"`
-	TokenId        int64     `json:"token_id"`
-	Token          string    `json:"token"`
-	ExpirationTime time.Time `json:"expiration_time"`
+	RegisterNumber int32  `json:"register_number"`
+	Email          string `json:"email"`
+	Nickname       string `json:"nickname"`
+	Company        string `json:"company"`
+	AccessToken    string `json:"access_token"`
+	RefreshToken   string `json:"refresh_token"`
 }
-
-// type ArticleReplies struct {
-// 	gorm.Model
-// 	ReplyId    int32     `gorm:"column:reply_id" json:"reply_id"`
-// 	ArticleId  int32     `gorm:"column:article_id" json:"article_id"`
-// 	Nickname   string    `gorm:"column:nickname" json:"nickname"`
-// 	Contents   string    `gorm:"column:contents" json:"contents"`
-// 	Likes      int32     `gorm:"column:likes" json:"likes"`
-// 	Unlikes    int32     `gorm:"column:unlikes" json:"unlikes"`
-// 	isModified string    `gorm:"column:is_modified" json:"is_modified"`
-// 	CreatedAt  time.Time `gorm:"column:created_at" json:"created_at"`
-// 	ModifiedAt time.Time `gorm:"column:modified_at" json:"modified_at"`
-// }
-
-// func (ArticleReplies) TableName() string {
-// 	return "article_replies"
-// }

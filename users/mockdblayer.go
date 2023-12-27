@@ -5,33 +5,17 @@ import (
 )
 
 type MockDBLayer struct {
-	err    error
-	users  []Users
-	tokens []Tokens
+	err   error
+	users []Users
 }
 
-func NewMockDBLayer(
-	users []Users,
-	tokens []Tokens) *MockDBLayer {
+func NewMockDBLayer(users []Users) *MockDBLayer {
 	return &MockDBLayer{
-		users:  users,
-		tokens: tokens,
+		users: users,
 	}
 }
 
 func NewMockDBLayerWithData() *MockDBLayer {
-	TOKEN := `[
-		{
-			"token_id" : 1,
-			"register_number" : 1,
-			"token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE3MDE1Njg3NzF9.Ii4AGCsgmjqGGVqENxe0cSzSn3v-Pb1VieAStvuhxSc",
-			"expiration_time" : "2023-12-03 10:59:31",
-			"created_at" : "2023-12-02 22:59:31",
-			"updated_at" : "2023-12-02 22:59:31",
-			"deleted_at" : null
-		}
-	]
-	`
 	USERS := `[
 		{
 			"register_number" : 1,
@@ -61,19 +45,13 @@ func NewMockDBLayerWithData() *MockDBLayer {
 	`
 
 	var users []Users
-	var tokens []Tokens
 	json.Unmarshal([]byte(USERS), &users)
-	json.Unmarshal([]byte(TOKEN), &tokens)
 
-	return NewMockDBLayer(users, tokens)
+	return NewMockDBLayer(users)
 }
 
 func (mock *MockDBLayer) GetMockUserData() []Users {
 	return mock.users
-}
-
-func (mock *MockDBLayer) GetMockTokenData() []Tokens {
-	return mock.tokens
 }
 
 func (mock *MockDBLayer) SetError(err error) {

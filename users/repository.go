@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -80,71 +79,6 @@ func hashPassword(password *string) error {
 	return nil
 }
 
-func (r *UserRepository) addToken(registerNumber int32) (Tokens, error) {
-	token, err := GenerateToken(registerNumber)
-	if err != nil {
-		return token, err
-	}
-
-	return token, r.db.Omit("token_id").Create(&token).Error
-}
-
-func (r *UserRepository) getToken(registerNumber int32) (Tokens, error) {
-	var token Tokens
-	result := r.db.Table("user_tokens").
-		Where(&Tokens{RegisterNumber: registerNumber}).
-		Order("token_id DESC").
-		Limit(1).
-		Find(&token)
-
-	err := result.Error
-	if err != nil {
-		return token, err
-	}
-
-	// fmt.Printf("now : %s\n", time.Now().Format("2006-01-02 15:04:05"))
-	// fmt.Printf("token : %s\n", token.ExpirationTime.Format("2006-01-02 15:04:05"))
-	if time.Now().Before(token.ExpirationTime) {
-		return token, err
-	}
-
-	token, err = r.addToken(registerNumber)
-	if err != nil {
-		return token, err
-	}
-
-	return token, err
-}
-
-func GenerateToken(registerNumber int32) (Tokens, error) {
-	expirationTime := time.Now().Add(TokenExpirationHour * time.Hour)
-
-	claims := &Claims{
-		UserID: registerNumber,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	secretKey, err := generateRandomKey(32)
-	if err != nil {
-		return Tokens{}, err
-	}
-
-	signedToken, err := token.SignedString([]byte(secretKey))
-	if err != nil {
-		return Tokens{}, err
-	}
-
-	return Tokens{
-		RegisterNumber: registerNumber,
-		Token:          signedToken,
-		ExpirationTime: expirationTime,
-	}, nil
-}
-
 func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
 	var user Users
 	var userCount int64
@@ -163,7 +97,7 @@ func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponse
 		return UserResponseDto{}, errors.New("Invalid password")
 	}
 
-	token, err := r.getToken(user.RegisterNumber)
+	token, err := GenerateTokens(user.RegisterNumber)
 	if err != nil {
 		return UserResponseDto{}, err
 	}
@@ -173,9 +107,8 @@ func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponse
 		Email:          user.Email,
 		Nickname:       user.Nickname,
 		Company:        user.Company,
-		TokenId:        token.TokenId,
-		Token:          token.Token,
-		ExpirationTime: token.ExpirationTime,
+		AccessToken:    token.AccessToken,
+		RefreshToken:   token.RefreshToken,
 	}
 
 	return userResponseDto, nil
@@ -217,14 +150,3 @@ func (r *UserRepository) ChangePassword(userRequestDto UserRequestDto) (UserResp
 
 	return userResponseDto, nil
 }
-
-// func (db *DBORM) GetUsersByEmailAndNickname(user Users) (Users, error) {
-// 	fmt.Println("dblayer AddUser")
-// 	result := db.Table("Customers").Where(&Customer{Email: email})
-
-// 	user.IsActive = True
-// 	user.LoggedIn = True
-// 	hashPassword(&user.Password)
-// 	fmt.Println(user)
-// 	return user, db.Omit("register_number").Create(&user).Error
-// }
