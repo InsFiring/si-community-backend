@@ -93,7 +93,7 @@ func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponse
 		return UserResponseDto{}, errors.New("User not Founded")
 	}
 
-	if !checkPassword(user.Password, userRequestDto.Password) {
+	if !checkPassword(user.Password, userRequestDto.CurrentPassword) {
 		return UserResponseDto{}, errors.New("Invalid password")
 	}
 
@@ -132,11 +132,15 @@ func (r *UserRepository) ChangePassword(userRequestDto UserRequestDto) (UserResp
 		return UserResponseDto{}, errors.New("User not Founded")
 	}
 
-	hashPassword(&user.Password)
+	if !checkPassword(user.Password, userRequestDto.CurrentPassword) {
+		return UserResponseDto{}, errors.New("Invalid password")
+	}
+
+	hashPassword(&userRequestDto.NewPassword)
 
 	err := r.db.Model(&user).
 		Where(&Users{Email: userRequestDto.Email}).
-		Update("password", user.Password).Error
+		Update("password", userRequestDto.NewPassword).Error
 	if err != nil {
 		return UserResponseDto{}, err
 	}
