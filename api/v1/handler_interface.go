@@ -8,6 +8,7 @@ type HandlerInterface interface {
 	AddUser(c *gin.Context)
 	SignIn(c *gin.Context)
 	ChangePassword(c *gin.Context)
+	HasEmail(c *gin.Context)
 	AddArticle(c *gin.Context)
 	GetArticles(c *gin.Context)
 	GetArticleById(c *gin.Context)

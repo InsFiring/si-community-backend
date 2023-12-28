@@ -150,3 +150,20 @@ func (r *UserRepository) ChangePassword(userRequestDto UserRequestDto) (UserResp
 
 	return userResponseDto, nil
 }
+
+func (r *UserRepository) HasEmail(userRequestDto UserRequestDto) (bool, error) {
+	var user Users
+	var userCount int64
+
+	result := r.db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
+	if result.Error != nil {
+		return true, result.Error
+	}
+
+	result.Count(&userCount)
+	if userCount == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}

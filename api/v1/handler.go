@@ -126,8 +126,6 @@ func (h *Handler) SignIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, userResponseDto)
-
-	return
 }
 
 // @Description 비밀번호 변경
@@ -152,8 +150,29 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, userResponseDto)
 
-	return
+}
 
+func (h *Handler) HasEmail(c *gin.Context) {
+	var userRequestDto user.UserRequestDto
+	err := c.ShouldBindJSON(&userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	hasEmail, err := h.userRepsitory.HasEmail(userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	emailResponse := struct {
+		HasEmail bool `json:"has_email"`
+	}{
+		HasEmail: hasEmail,
+	}
+
+	c.JSON(http.StatusOK, emailResponse)
 }
 
 func (h *Handler) AddArticle(c *gin.Context) {
