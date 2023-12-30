@@ -14,7 +14,7 @@ $ docker-compose up -d
 ```
 * go언어로 빌드된 backend 실행
 ```
-$ bin/si-community-backend
+$ bin/si-community-backend -config ./config/configuration_test.toml
 ```
 
 ## API
