@@ -1,5 +1,65 @@
 basePath: /v1
 definitions:
+  api.EmailResponse:
+    properties:
+      has_email:
+        type: boolean
+    type: object
+  article.ArticleModifyDto:
+    properties:
+      article_id:
+        type: integer
+      contents:
+        type: string
+      ratings:
+        type: integer
+      title:
+        type: string
+    type: object
+  article.ArticleRequestDto:
+    properties:
+      company:
+        type: string
+      contents:
+        type: string
+      nickname:
+        type: string
+      ratings:
+        type: integer
+      title:
+        type: string
+    type: object
+  article.Articles:
+    properties:
+      article_id:
+        type: integer
+      company:
+        type: string
+      contents:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      is_modified:
+        type: string
+      likes:
+        type: integer
+      nickname:
+        type: string
+      ratings:
+        type: integer
+      title:
+        type: string
+      unlikes:
+        type: integer
+      updatedAt:
+        type: string
+      view_counts:
+        type: integer
+    type: object
   gorm.DeletedAt:
     properties:
       time:
@@ -8,31 +68,31 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
-  models.UserRequestDto:
+  user.UserRequestDto:
     properties:
+      current_password:
+        type: string
       email:
         type: string
-      password:
+      new_password:
         type: string
     type: object
-  models.UserResponseDto:
+  user.UserResponseDto:
     properties:
+      access_token:
+        type: string
       company:
         type: string
       email:
         type: string
-      expiration_time:
-        type: string
       nickname:
+        type: string
+      refresh_token:
         type: string
       register_number:
         type: integer
-      token:
-        type: string
-      token_id:
-        type: integer
     type: object
-  models.Users:
+  user.Users:
     properties:
       company:
         type: string
@@ -45,6 +105,8 @@ definitions:
       id:
         type: integer
       is_active:
+        type: string
+      is_admin:
         type: string
       loggedin:
         type: string
@@ -60,28 +122,200 @@ definitions:
 host: localhost:8000
 info:
   contact: {}
-  description: This is a sample Gin API with Swagger documentation.
-  title: Your Gin API
+  description: SI Community API Swagger.
+  title: SI Community API
   version: "1.0"
 paths:
+  /v1/article:
+    get:
+      description: 게시글 조회
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+    post:
+      consumes:
+      - application/json
+      description: 게시글 추가
+      parameters:
+      - description: ratings, title, contents, nickname, company 필수
+        in: body
+        name: ArticleRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/article.ArticleRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/article/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 게시글 삭제
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+    get:
+      consumes:
+      - application/json
+      description: 게시글 ID로 조회
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+    put:
+      consumes:
+      - application/json
+      description: 게시글 수정
+      parameters:
+      - description: 수정 관련 DTO 사용
+        in: body
+        name: ArticleModifyDto
+        required: true
+        schema:
+          $ref: '#/definitions/article.ArticleModifyDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/article/{id}/cancel_like:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 좋아요 취소
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/article/{id}/cancel_unlike:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 싫어요 취소
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/article/{id}/like:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 좋아요 수 추가
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/article/{id}/unlike:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 싫어요 추가
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
   /v1/users:
     post:
       consumes:
       - application/json
       description: 회원 가입
       parameters:
-      - description: email, password, nickname, company만 있으면 됨
+      - description: email, password, nickname, company만 있으면 됨 / is_admin 컬럼으로 회사
+          관리자인지 일반유저인지 구분 가능
         in: body
-        name: users
+        name: Users
         schema:
-          $ref: '#/definitions/models.Users'
+          $ref: '#/definitions/user.Users'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Users'
+            $ref: '#/definitions/user.Users'
+      tags:
+      - users
   /v1/users/changePassword:
     post:
       consumes:
@@ -90,34 +324,59 @@ paths:
       parameters:
       - description: 비밀번호 변경 input
         in: body
-        name: users
+        name: UserRequestDto
         required: true
         schema:
-          $ref: '#/definitions/models.UserRequestDto'
+          $ref: '#/definitions/user.UserRequestDto'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/models.UserResponseDto'
+            $ref: '#/definitions/user.UserResponseDto'
+      tags:
+      - users
+  /v1/users/emails:
+    post:
+      consumes:
+      - application/json
+      description: 이메일 중복 체크
+      parameters:
+      - description: 이메일값만 있으면 됨
+        in: body
+        name: UserRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.EmailResponse'
+      tags:
+      - users
   /v1/users/signin:
     post:
       consumes:
       - application/json
       description: 로그인
       parameters:
-      - description: 로그인 input
+      - description: 로그인 input / new_password는 없어도 됨.
         in: body
-        name: users
+        name: UserRequestDto
         required: true
         schema:
-          $ref: '#/definitions/models.UserRequestDto'
+          $ref: '#/definitions/user.UserRequestDto'
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/models.UserResponseDto'
+            $ref: '#/definitions/user.UserResponseDto'
+      tags:
+      - users
 swagger: "2.0"

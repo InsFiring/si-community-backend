@@ -37,9 +37,9 @@ func argumentParser() {
 	flag.Parse()
 }
 
-// @title Your Gin API
+// @title SI Community API
 // @version 1.0
-// @description This is a sample Gin API with Swagger documentation.
+// @description SI Community API Swagger.
 // @host localhost:8000
 // @BasePath /v1
 func main() {

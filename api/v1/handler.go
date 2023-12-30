@@ -18,6 +18,10 @@ type Handler struct {
 	articleReplyRepository articlereply.ArticleReplyRepository
 }
 
+type EmailResponse struct {
+	HasEmail bool `json:"has_email"`
+}
+
 func addTestUser(userRepository user.UserRepository) {
 	user := user.Users{
 		Email:    "test@gmail.com",
@@ -78,11 +82,12 @@ func NewHandler(dbConn *gorm.DB) (*Handler, error) {
 	return handler, nil
 }
 
+// @Tags users
 // @Description 회원 가입
 // @name Add User
 // @Accept  json
 // @Produce  json
-// @Param users body user.Users false "email, password, nickname, company만 있으면 됨"
+// @Param Users body user.Users false "email, password, nickname, company만 있으면 됨 / is_admin 컬럼으로 회사 관리자인지 일반유저인지 구분 가능"
 // @Router /v1/users [post]
 // @Success 201 {object} user.Users
 func (h *Handler) AddUser(c *gin.Context) {
@@ -104,13 +109,14 @@ func (h *Handler) AddUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
+// @Tags users
 // @Description 로그인
 // @name Sign In
 // @Accept  json
 // @Produce  json
-// @Param users body user.Users true "로그인 input"
+// @Param UserRequestDto body user.UserRequestDto true "로그인 input / new_password는 없어도 됨."
 // @Router /v1/users/signin [post]
-// @Success 201 {object} user.Users
+// @Success 200 {object} user.UserResponseDto
 func (h *Handler) SignIn(c *gin.Context) {
 	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
@@ -128,13 +134,14 @@ func (h *Handler) SignIn(c *gin.Context) {
 	c.JSON(http.StatusOK, userResponseDto)
 }
 
+// @Tags users
 // @Description 비밀번호 변경
 // @name ChangePassword
 // @Accept  json
 // @Produce  json
-// @Param users body user.Users true "비밀번호 변경 input"
+// @Param UserRequestDto body user.UserRequestDto true "비밀번호 변경 input"
 // @Router /v1/users/changePassword [post]
-// @Success 201 {object} user.Users
+// @Success 200 {object} user.UserResponseDto
 func (h *Handler) ChangePassword(c *gin.Context) {
 	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
@@ -152,6 +159,14 @@ func (h *Handler) ChangePassword(c *gin.Context) {
 
 }
 
+// @Tags users
+// @Description 이메일 중복 체크
+// @name HasEmail
+// @Accept  json
+// @Produce  json
+// @Param UserRequestDto body user.UserRequestDto true "이메일값만 있으면 됨"
+// @Router /v1/users/emails [post]
+// @Success 200 {object} EmailResponse
 func (h *Handler) HasEmail(c *gin.Context) {
 	var userRequestDto user.UserRequestDto
 	err := c.ShouldBindJSON(&userRequestDto)
@@ -166,15 +181,21 @@ func (h *Handler) HasEmail(c *gin.Context) {
 		return
 	}
 
-	emailResponse := struct {
-		HasEmail bool `json:"has_email"`
-	}{
+	emailResponse := &EmailResponse{
 		HasEmail: hasEmail,
 	}
 
 	c.JSON(http.StatusOK, emailResponse)
 }
 
+// @Tags accounts
+// @Description 게시글 추가
+// @name AddArticle
+// @Accept  json
+// @Produce  json
+// @Param ArticleRequestDto body article.ArticleRequestDto true "ratings, title, contents, nickname, company 필수"
+// @Router /v1/article [post]
+// @Success 200 {object} article.Articles
 func (h *Handler) AddArticle(c *gin.Context) {
 	var articleRequestDto article.ArticleRequestDto
 	err := c.ShouldBindJSON(&articleRequestDto)
@@ -194,12 +215,25 @@ func (h *Handler) AddArticle(c *gin.Context) {
 }
 
 // TODO: 페이지네이션 처리 필요
+// @Tags accounts
+// @Description 게시글 조회
+// @name GetArticles
+// @Router /v1/article [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) GetArticles(c *gin.Context) {
 	articles := h.articleRepository.GetArticles()
 
 	c.JSON(http.StatusOK, articles)
 }
 
+// @Tags accounts
+// @Description 게시글 ID로 조회
+// @name GetArticleById
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id} [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) GetArticleById(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -218,6 +252,14 @@ func (h *Handler) GetArticleById(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 수정
+// @name ModifyArticle
+// @Accept  json
+// @Produce  json
+// @Param ArticleModifyDto body article.ArticleModifyDto true "수정 관련 DTO 사용"
+// @Router /v1/article/{id} [put]
+// @Success 200 {object} article.Articles
 func (h *Handler) ModifyArticle(c *gin.Context) {
 	var articleModifyDto article.ArticleModifyDto
 	err := c.ShouldBindJSON(&articleModifyDto)
@@ -235,6 +277,14 @@ func (h *Handler) ModifyArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 좋아요 수 추가
+// @name PlusLike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id}/like [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) PlusLike(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -253,6 +303,14 @@ func (h *Handler) PlusLike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 좋아요 취소
+// @name CancelLike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id}/cancel_like [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) CancelLike(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -271,6 +329,14 @@ func (h *Handler) CancelLike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 싫어요 추가
+// @name PlusUnlike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id}/unlike [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) PlusUnlike(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -289,6 +355,14 @@ func (h *Handler) PlusUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 싫어요 취소
+// @name PlusUnlike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id}/cancel_unlike [get]
+// @Success 200 {object} article.Articles
 func (h *Handler) CancelUnlike(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -307,6 +381,14 @@ func (h *Handler) CancelUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// @Tags accounts
+// @Description 게시글 삭제
+// @name DeleteArticle
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id} [delete]
+// @Success 200 {object} article.Articles
 func (h *Handler) DeleteArticle(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)

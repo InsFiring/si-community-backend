@@ -1,14 +1,276 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample Gin API with Swagger documentation.",
-        "title": "Your Gin API",
+        "description": "SI Community API Swagger.",
+        "title": "SI Community API",
         "contact": {},
         "version": "1.0"
     },
     "host": "localhost:8000",
     "basePath": "/v1",
     "paths": {
+        "/v1/article": {
+            "get": {
+                "description": "게시글 조회",
+                "tags": [
+                    "accounts"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "게시글 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "description": "ratings, title, contents, nickname, company 필수",
+                        "name": "ArticleRequestDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article.ArticleRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}": {
+            "get": {
+                "description": "게시글 ID로 조회",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "게시글 수정",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "description": "수정 관련 DTO 사용",
+                        "name": "ArticleModifyDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article.ArticleModifyDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "게시글 삭제",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/cancel_like": {
+            "get": {
+                "description": "게시글 좋아요 취소",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/cancel_unlike": {
+            "get": {
+                "description": "게시글 싫어요 취소",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/like": {
+            "get": {
+                "description": "게시글 좋아요 수 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/unlike": {
+            "get": {
+                "description": "게시글 싫어요 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/users": {
             "post": {
                 "description": "회원 가입",
@@ -18,13 +280,16 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "users"
+                ],
                 "parameters": [
                     {
-                        "description": "email, password, nickname, company만 있으면 됨",
-                        "name": "users",
+                        "description": "email, password, nickname, company만 있으면 됨 / is_admin 컬럼으로 회사 관리자인지 일반유저인지 구분 가능",
+                        "name": "Users",
                         "in": "body",
                         "schema": {
-                            "$ref": "#/definitions/models.Users"
+                            "$ref": "#/definitions/user.Users"
                         }
                     }
                 ],
@@ -32,7 +297,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Users"
+                            "$ref": "#/definitions/user.Users"
                         }
                     }
                 }
@@ -47,22 +312,58 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "users"
+                ],
                 "parameters": [
                     {
                         "description": "비밀번호 변경 input",
-                        "name": "users",
+                        "name": "UserRequestDto",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserRequestDto"
+                            "$ref": "#/definitions/user.UserRequestDto"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserResponseDto"
+                            "$ref": "#/definitions/user.UserResponseDto"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/emails": {
+            "post": {
+                "description": "이메일 중복 체크",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "description": "이메일값만 있으면 됨",
+                        "name": "UserRequestDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserRequestDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.EmailResponse"
                         }
                     }
                 }
@@ -77,22 +378,25 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "users"
+                ],
                 "parameters": [
                     {
-                        "description": "로그인 input",
-                        "name": "users",
+                        "description": "로그인 input / new_password는 없어도 됨.",
+                        "name": "UserRequestDto",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserRequestDto"
+                            "$ref": "#/definitions/user.UserRequestDto"
                         }
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserResponseDto"
+                            "$ref": "#/definitions/user.UserResponseDto"
                         }
                     }
                 }
@@ -100,6 +404,98 @@
         }
     },
     "definitions": {
+        "api.EmailResponse": {
+            "type": "object",
+            "properties": {
+                "has_email": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "article.ArticleModifyDto": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "type": "integer"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "article.ArticleRequestDto": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "article.Articles": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "type": "integer"
+                },
+                "company": {
+                    "type": "string"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_modified": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "unlikes": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "view_counts": {
+                    "type": "integer"
+                }
+            }
+        },
         "gorm.DeletedAt": {
             "type": "object",
             "properties": {
@@ -112,44 +508,44 @@
                 }
             }
         },
-        "models.UserRequestDto": {
+        "user.UserRequestDto": {
             "type": "object",
             "properties": {
+                "current_password": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
-                "password": {
+                "new_password": {
                     "type": "string"
                 }
             }
         },
-        "models.UserResponseDto": {
+        "user.UserResponseDto": {
             "type": "object",
             "properties": {
+                "access_token": {
+                    "type": "string"
+                },
                 "company": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "expiration_time": {
+                "nickname": {
                     "type": "string"
                 },
-                "nickname": {
+                "refresh_token": {
                     "type": "string"
                 },
                 "register_number": {
                     "type": "integer"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "token_id": {
-                    "type": "integer"
                 }
             }
         },
-        "models.Users": {
+        "user.Users": {
             "type": "object",
             "properties": {
                 "company": {
@@ -168,6 +564,9 @@
                     "type": "integer"
                 },
                 "is_active": {
+                    "type": "string"
+                },
+                "is_admin": {
                     "type": "string"
                 },
                 "loggedin": {
