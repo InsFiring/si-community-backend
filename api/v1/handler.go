@@ -35,17 +35,19 @@ func addTestUser(userRepository user.UserRepository) {
 }
 
 func addTestArticle(articleRepository article.ArticleRepository) {
-	articleRequestDto := article.ArticleRequestDto{
-		Ratings:  5,
-		Title:    "이건제목",
-		Contents: "글 내용입니다.",
-		Nickname: "test",
-		Company:  "keke",
-	}
 
-	articles := articleRepository.GetArticles()
+	articles := articleRepository.GetArticles(1, 1)
 	if len(articles) == 0 {
-		articleRepository.AddArticle(articleRequestDto)
+		for i := 1; i < 100; i++ {
+			articleRequestDto := article.ArticleRequestDto{
+				Ratings:  int32(i % 5),
+				Title:    fmt.Sprintf("이건 제목 %d", i),
+				Contents: fmt.Sprintf("이건 내용 %d", i),
+				Nickname: "test",
+				Company:  "keke",
+			}
+			articleRepository.AddArticle(articleRequestDto)
+		}
 	}
 }
 
@@ -214,14 +216,32 @@ func (h *Handler) AddArticle(c *gin.Context) {
 	c.JSON(http.StatusCreated, article)
 }
 
-// TODO: 페이지네이션 처리 필요
 // @Tags accounts
 // @Description 게시글 조회
 // @name GetArticles
-// @Router /v1/article [get]
+// @Accept  json
+// @Produce  json
+// @Param page query string true "page 번호"
+// @Param offset query string true "offset 숫자"
+// @Router /v1/articles [get]
 // @Success 200 {object} article.Articles
 func (h *Handler) GetArticles(c *gin.Context) {
-	articles := h.articleRepository.GetArticles()
+	paramPage := c.Query("page")
+	paramOffset := c.Query("offset")
+
+	page, err := strconv.Atoi(paramPage)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	offset, err := strconv.Atoi(paramOffset)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	articles := h.articleRepository.GetArticles(page, offset)
 
 	c.JSON(http.StatusOK, articles)
 }

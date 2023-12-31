@@ -37,11 +37,14 @@ func (r *ArticleRepository) AddArticle(articleRequestDto ArticleRequestDto) (Art
 	return article, r.db.Omit("article_id").Create(&article).Error
 }
 
-func (r *ArticleRepository) GetArticles() []Articles {
+func (r *ArticleRepository) GetArticles(page int, offset int) []Articles {
 	fmt.Println("ArticleRepository GetArticles")
 
 	var articles []Articles
-	r.db.Table("articles").Find(&articles)
+
+	r.db.Table("articles").Offset((page - 1) * offset).
+		Limit(offset).
+		Find(&articles)
 
 	return articles
 }

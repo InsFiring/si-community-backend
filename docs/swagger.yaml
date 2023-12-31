@@ -127,15 +127,6 @@ info:
   version: "1.0"
 paths:
   /v1/article:
-    get:
-      description: 게시글 조회
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/article.Articles'
-      tags:
-      - accounts
     post:
       consumes:
       - application/json
@@ -286,6 +277,31 @@ paths:
         name: id
         required: true
         type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - accounts
+  /v1/articles:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 조회
+      parameters:
+      - description: page 번호
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: offset 숫자
+        in: query
+        name: offset
+        required: true
+        type: string
       produces:
       - application/json
       responses:

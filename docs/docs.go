@@ -16,20 +16,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/v1/article": {
-            "get": {
-                "description": "게시글 조회",
-                "tags": [
-                    "accounts"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/article.Articles"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "게시글 추가",
                 "consumes": [
@@ -264,6 +250,44 @@ const docTemplate = `{
                         "description": "게시글 ID",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/articles": {
+            "get": {
+                "description": "게시글 조회",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page 번호",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset 숫자",
+                        "name": "offset",
+                        "in": "query",
                         "required": true
                     }
                 ],

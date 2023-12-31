@@ -31,7 +31,7 @@ $ bin/si-community-backend -config ./config/configuration_test.toml
 |Method|URL|설명|
 |---|---|---|
 |POST|http://127.0.0.1:8000/v1/article|게시글 등록|
-|GET|http://127.0.0.1:8000/v1/article|게시글 리스트 조회|
+|GET|http://127.0.0.1:8000/v1/articles|게시글 리스트 조회|
 |GET|http://127.0.0.1:8000/v1/article/:id|단일 게시글 조회|
 |PUT|http://127.0.0.1:8000/v1/article/:id|단일 게시글 수정|
 |GET|http://127.0.0.1:8000/v1/article/:id/like|게시글 좋아요 추가|
