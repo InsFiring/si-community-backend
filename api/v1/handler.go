@@ -277,18 +277,27 @@ func (h *Handler) GetArticleById(c *gin.Context) {
 // @name ModifyArticle
 // @Accept  json
 // @Produce  json
+// @Param id path int true "게시글 ID"
 // @Param ArticleModifyDto body article.ArticleModifyDto true "수정 관련 DTO 사용"
 // @Router /v1/article/{id} [put]
 // @Success 200 {object} article.Articles
 func (h *Handler) ModifyArticle(c *gin.Context) {
-	var articleModifyDto article.ArticleModifyDto
-	err := c.ShouldBindJSON(&articleModifyDto)
+	paramId := c.Param("id")
+	articleId, err := strconv.Atoi(paramId)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	article, err := h.articleRepository.ModifyArticle(articleModifyDto)
+	var articleModifyDto article.ArticleModifyDto
+	err = c.ShouldBindJSON(&articleModifyDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	article, err := h.articleRepository.ModifyArticle(articleModifyDto, int32(articleId))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

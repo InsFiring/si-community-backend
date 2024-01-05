@@ -29,10 +29,9 @@ type ArticleRequestDto struct {
 }
 
 type ArticleModifyDto struct {
-	ArticleId int32  `json:"article_id"`
-	Ratings   int32  `json:"ratings"`
-	Title     string `json:"title"`
-	Contents  string `json:"contents"`
+	Ratings  int32  `json:"ratings"`
+	Title    string `json:"title"`
+	Contents string `json:"contents"`
 }
 
 type ArticleSearchDto struct {

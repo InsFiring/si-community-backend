@@ -77,14 +77,14 @@ func (r *ArticleRepository) GetArticleById(articleId int32) (Articles, error) {
 	return article, nil
 }
 
-func (r *ArticleRepository) ModifyArticle(articleModifyDto ArticleModifyDto) (Articles, error) {
+func (r *ArticleRepository) ModifyArticle(articleModifyDto ArticleModifyDto, articleId int32) (Articles, error) {
 	fmt.Println("ArticleRepository ModifyArticle")
 
 	var article Articles
 	var count int64
 
 	result := r.db.Table("articles").
-		Where(&Articles{ArticleId: articleModifyDto.ArticleId}).
+		Where(&Articles{ArticleId: articleId}).
 		Find(&article)
 
 	result.Count(&count)

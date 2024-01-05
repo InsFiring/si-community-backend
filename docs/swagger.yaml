@@ -7,8 +7,6 @@ definitions:
     type: object
   article.ArticleModifyDto:
     properties:
-      article_id:
-        type: integer
       contents:
         type: string
       ratings:
@@ -235,6 +233,11 @@ paths:
       - application/json
       description: 게시글 수정
       parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
       - description: 수정 관련 DTO 사용
         in: body
         name: ArticleModifyDto

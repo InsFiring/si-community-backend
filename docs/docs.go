@@ -136,6 +136,13 @@ const docTemplate = `{
                 ],
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "수정 관련 DTO 사용",
                         "name": "ArticleModifyDto",
                         "in": "body",
@@ -490,9 +497,6 @@ const docTemplate = `{
         "article.ArticleModifyDto": {
             "type": "object",
             "properties": {
-                "article_id": {
-                    "type": "integer"
-                },
                 "contents": {
                     "type": "string"
                 },
