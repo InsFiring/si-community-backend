@@ -19,6 +19,9 @@ func DBConnection(tomlConfig TomlConfig) (*gorm.DB, error) {
 	connection := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		tomlConfig.Database.User, tomlConfig.Database.Password, tomlConfig.Database.Server, tomlConfig.Database.Port, tomlConfig.Database.Dbname)
 	db, err := gorm.Open(mysql.Open(connection), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
 
 	return db, err
 }
