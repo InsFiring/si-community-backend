@@ -190,7 +190,7 @@ func (h *Handler) HasEmail(c *gin.Context) {
 	c.JSON(http.StatusOK, emailResponse)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 추가
 // @name AddArticle
 // @Accept  json
@@ -216,7 +216,7 @@ func (h *Handler) AddArticle(c *gin.Context) {
 	c.JSON(http.StatusCreated, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 조회
 // @name GetArticles
 // @Accept  json
@@ -246,7 +246,7 @@ func (h *Handler) GetArticles(c *gin.Context) {
 	c.JSON(http.StatusOK, articles)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 ID로 조회
 // @name GetArticleById
 // @Accept  json
@@ -272,7 +272,7 @@ func (h *Handler) GetArticleById(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 수정
 // @name ModifyArticle
 // @Accept  json
@@ -297,7 +297,7 @@ func (h *Handler) ModifyArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 좋아요 수 추가
 // @name PlusLike
 // @Accept  json
@@ -323,7 +323,7 @@ func (h *Handler) PlusLike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 좋아요 취소
 // @name CancelLike
 // @Accept  json
@@ -349,7 +349,7 @@ func (h *Handler) CancelLike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 싫어요 추가
 // @name PlusUnlike
 // @Accept  json
@@ -375,7 +375,7 @@ func (h *Handler) PlusUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
 // @Description 게시글 싫어요 취소
 // @name PlusUnlike
 // @Accept  json
@@ -401,7 +401,50 @@ func (h *Handler) CancelUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
-// @Tags accounts
+// @Tags articles
+// @Description 게시글 검색 기능
+// @name SearchArticles
+// @Accept  json
+// @Produce  json
+// @Param page query string true "page 번호"
+// @Param offset query string true "offset 숫자"
+// @Param ArticleSearchDto body article.ArticleSearchDto true "ratings, title, contents, nickname, company 중 1개 필드 검색 / 다중 검색은 구현 안함"
+// @Router /v1/article [get]
+// @Success 200 {object} article.Articles
+func (h *Handler) SearchArticles(c *gin.Context) {
+	paramPage := c.Query("page")
+	paramOffset := c.Query("offset")
+
+	page, err := strconv.Atoi(paramPage)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	offset, err := strconv.Atoi(paramOffset)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var articleSearchDto article.ArticleSearchDto
+	err = c.ShouldBindJSON(&articleSearchDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	articles, err := h.articleRepository.SearchArticles(articleSearchDto, page, offset)
+	if err != nil {
+		fmt.Println("db add article error")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, articles)
+}
+
+// @Tags articles
 // @Description 게시글 삭제
 // @name DeleteArticle
 // @Accept  json

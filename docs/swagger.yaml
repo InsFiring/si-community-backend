@@ -29,6 +29,19 @@ definitions:
       title:
         type: string
     type: object
+  article.ArticleSearchDto:
+    properties:
+      company:
+        type: string
+      contents:
+        type: string
+      nickname:
+        type: string
+      ratings:
+        type: integer
+      title:
+        type: string
+    type: object
   article.Articles:
     properties:
       article_id:
@@ -127,6 +140,37 @@ info:
   version: "1.0"
 paths:
   /v1/article:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 검색 기능
+      parameters:
+      - description: page 번호
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: offset 숫자
+        in: query
+        name: offset
+        required: true
+        type: string
+      - description: ratings, title, contents, nickname, company 중 1개 필드 검색 / 다중 검색은
+          구현 안함
+        in: body
+        name: ArticleSearchDto
+        required: true
+        schema:
+          $ref: '#/definitions/article.ArticleSearchDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - articles
     post:
       consumes:
       - application/json
@@ -146,7 +190,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/article/{id}:
     delete:
       consumes:
@@ -166,7 +210,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
     get:
       consumes:
       - application/json
@@ -185,7 +229,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
     put:
       consumes:
       - application/json
@@ -205,7 +249,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/article/{id}/cancel_like:
     get:
       consumes:
@@ -225,7 +269,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/article/{id}/cancel_unlike:
     get:
       consumes:
@@ -245,7 +289,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/article/{id}/like:
     get:
       consumes:
@@ -265,7 +309,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/article/{id}/unlike:
     get:
       consumes:
@@ -285,7 +329,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/articles:
     get:
       consumes:
@@ -310,7 +354,7 @@ paths:
           schema:
             $ref: '#/definitions/article.Articles'
       tags:
-      - accounts
+      - articles
   /v1/users:
     post:
       consumes:

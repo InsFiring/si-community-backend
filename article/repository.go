@@ -220,6 +220,51 @@ func (r *ArticleRepository) CancelUnlike(articleId int32) (Articles, error) {
 	return article, nil
 }
 
+func (r *ArticleRepository) SearchArticles(articleSearchDto ArticleSearchDto, page int, offset int) ([]Articles, error) {
+	fmt.Println("ArticleRepository SearchArticles")
+
+	var articles []Articles
+	var result *gorm.DB
+
+	if articleSearchDto.Ratings != nil {
+		result = r.db.Table("articles").
+			Where(&Articles{Ratings: *articleSearchDto.Ratings}).
+			Offset((page - 1) * offset).
+			Limit(offset).
+			Find(&articles)
+	} else if articleSearchDto.Title != "" {
+		result = r.db.Table("articles").
+			Where("title Like ?", "%"+articleSearchDto.Title+"%").
+			Offset((page - 1) * offset).
+			Limit(offset).
+			Find(&articles)
+	} else if articleSearchDto.Contents != "" {
+		result = r.db.Table("articles").
+			Where("contents Like ?", "%"+articleSearchDto.Contents+"%").
+			Offset((page - 1) * offset).
+			Limit(offset).
+			Find(&articles)
+	} else if articleSearchDto.Nickname != "" {
+		result = r.db.Table("articles").
+			Where("nickname Like ?", "%"+articleSearchDto.Nickname+"%").
+			Offset((page - 1) * offset).
+			Limit(offset).
+			Find(&articles)
+	} else if articleSearchDto.Company != "" {
+		result = r.db.Table("articles").
+			Where("company Like ?", "%"+articleSearchDto.Company+"%").
+			Offset((page - 1) * offset).
+			Limit(offset).
+			Find(&articles)
+	}
+
+	if err := result.Error; result.Error != nil {
+		return articles, err
+	}
+
+	return articles, nil
+}
+
 func (r *ArticleRepository) DeleteArticle(articleId int32) (int32, error) {
 	fmt.Println("ArticleRepository DeleteArticle")
 

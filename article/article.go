@@ -34,3 +34,11 @@ type ArticleModifyDto struct {
 	Title     string `json:"title"`
 	Contents  string `json:"contents"`
 }
+
+type ArticleSearchDto struct {
+	Ratings  *int32 `json:"ratings,omitempty"`
+	Title    string `json:"title,omitempty"`
+	Contents string `json:"contents,omitempty"`
+	Nickname string `json:"nickname,omitempty"`
+	Company  string `json:"company,omitempty"`
+}

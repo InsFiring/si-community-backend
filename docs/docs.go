@@ -16,6 +16,51 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/v1/article": {
+            "get": {
+                "description": "게시글 검색 기능",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articles"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page 번호",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "offset 숫자",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "ratings, title, contents, nickname, company 중 1개 필드 검색 / 다중 검색은 구현 안함",
+                        "name": "ArticleSearchDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article.ArticleSearchDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "게시글 추가",
                 "consumes": [
@@ -25,7 +70,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -58,7 +103,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -87,7 +132,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -118,7 +163,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -149,7 +194,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -180,7 +225,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -211,7 +256,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -242,7 +287,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -273,7 +318,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "accounts"
+                    "articles"
                 ],
                 "parameters": [
                     {
@@ -460,6 +505,26 @@ const docTemplate = `{
             }
         },
         "article.ArticleRequestDto": {
+            "type": "object",
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "ratings": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "article.ArticleSearchDto": {
             "type": "object",
             "properties": {
                 "company": {

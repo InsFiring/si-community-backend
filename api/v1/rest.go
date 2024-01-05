@@ -40,6 +40,7 @@ func RunApiWithHandler(address string, handler HandlerInterface) error {
 	r.GET(BASEPATH+"/article/:id/cancel_like", handler.CancelLike)
 	r.GET(BASEPATH+"/article/:id/unlike", handler.PlusUnlike)
 	r.GET(BASEPATH+"/article/:id/cancel_unlike", handler.CancelUnlike)
+	r.GET(BASEPATH+"/article", handler.SearchArticles)
 	r.DELETE(BASEPATH+"/article/:id", handler.DeleteArticle)
 
 	r.POST(BASEPATH+"/article_reply", handler.AddArticleReply)
