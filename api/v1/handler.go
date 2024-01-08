@@ -495,6 +495,14 @@ func (h *Handler) DeleteArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, id)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 추가
+// @name AddArticleReply
+// @Accept  json
+// @Produce  json
+// @Param articleReplyRequestDto body articlereply.ArticleReplyRequestDto true "article_id, nickname, contents 필수, parent_reply_id는 대댓글에 따라 선택"
+// @Router /v1/article_reply [post]
+// @Success 200 {object} article.Articles
 func (h *Handler) AddArticleReply(c *gin.Context) {
 	var articleReplyRequestDto articlereply.ArticleReplyRequestDto
 
@@ -504,13 +512,13 @@ func (h *Handler) AddArticleReply(c *gin.Context) {
 		return
 	}
 
-	h.articleReplyRepository.AddArticleReply(articleReplyRequestDto)
+	articleReply, err := h.articleReplyRepository.AddArticleReply(articleReplyRequestDto)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, articleReplyRequestDto)
+	c.JSON(http.StatusCreated, articleReply)
 }
 
 func (h *Handler) GetArticleRepliesByArticleId(c *gin.Context) {
