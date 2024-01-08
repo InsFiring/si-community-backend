@@ -98,6 +98,11 @@ definitions:
       updatedAt:
         type: string
     type: object
+  article_reply.ArticleReplyModifyDto:
+    properties:
+      contents:
+        type: string
+    type: object
   article_reply.ArticleReplyRequestDto:
     properties:
       article_id:
@@ -300,6 +305,161 @@ paths:
       - description: 게시글 ID
         in: path
         name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
+  /v1/article/{id}/article_replies/{reply_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 게시글 댓글 삭제
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - article_reply
+    put:
+      consumes:
+      - application/json
+      description: 게시글 댓글 수정
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
+        required: true
+        type: integer
+      - description: 수정 관련 DTO 사용
+        in: body
+        name: ArticleReplyModifyDto
+        required: true
+        schema:
+          $ref: '#/definitions/article_reply.ArticleReplyModifyDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
+  /v1/article/{id}/article_replies/{reply_id}/cancel_like:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 댓글 좋아요 취소
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
+  /v1/article/{id}/article_replies/{reply_id}/cancel_unlike:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 댓글 싫어요 취소
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
+  /v1/article/{id}/article_replies/{reply_id}/like:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 댓글 좋아요 추가
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
+  /v1/article/{id}/article_replies/{reply_id}/unlike:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 댓글 싫어요 추가
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 댓글 ID
+        in: path
+        name: reply_id
         required: true
         type: integer
       produces:

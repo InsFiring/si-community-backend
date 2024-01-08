@@ -547,14 +547,14 @@ func (h *Handler) GetArticleRepliesByArticleId(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReplies)
 }
 
-// @Tags articles
+// @Tags article_reply
 // @Description 게시글 댓글 수정
-// @name article_reply
+// @name ModifyArticleReply
 // @Accept  json
 // @Produce  json
 // @Param id path int true "게시글 ID"
 // @Param reply_id path int true "댓글 ID"
-// @Param ArticleModifyDto body article.ArticleModifyDto true "수정 관련 DTO 사용"
+// @Param ArticleReplyModifyDto body article_reply.ArticleReplyModifyDto true "수정 관련 DTO 사용"
 // @Router /v1/article/{id}/article_replies/{reply_id} [put]
 // @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) ModifyArticleReply(c *gin.Context) {
@@ -588,6 +588,15 @@ func (h *Handler) ModifyArticleReply(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 좋아요 추가
+// @name PlusReplyLike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Router /v1/article/{id}/article_replies/{reply_id}/like [get]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) PlusReplyLike(c *gin.Context) {
 	paramId := c.Param("id")
 	paramReplyId := c.Param("reply_id")
@@ -613,6 +622,15 @@ func (h *Handler) PlusReplyLike(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 좋아요 취소
+// @name CancelReplyLike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Router /v1/article/{id}/article_replies/{reply_id}/cancel_like [get]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) CancelReplyLike(c *gin.Context) {
 	paramId := c.Param("id")
 	paramReplyId := c.Param("reply_id")
@@ -638,6 +656,15 @@ func (h *Handler) CancelReplyLike(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 싫어요 추가
+// @name PlusReplyUnlike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Router /v1/article/{id}/article_replies/{reply_id}/unlike [get]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) PlusReplyUnlike(c *gin.Context) {
 	paramId := c.Param("id")
 	paramReplyId := c.Param("reply_id")
@@ -663,6 +690,15 @@ func (h *Handler) PlusReplyUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 싫어요 취소
+// @name CancelReplyUnlike
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Router /v1/article/{id}/article_replies/{reply_id}/cancel_unlike [get]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) CancelReplyUnlike(c *gin.Context) {
 	paramId := c.Param("id")
 	paramReplyId := c.Param("reply_id")
@@ -688,6 +724,15 @@ func (h *Handler) CancelReplyUnlike(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 삭제
+// @name DeleteArticleReply
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Router /v1/article/{id}/article_replies/{reply_id} [delete]
+// @Success 200 {object} article.Articles
 func (h *Handler) DeleteArticleReply(c *gin.Context) {
 	paramId := c.Param("id")
 	paramReplyId := c.Param("reply_id")

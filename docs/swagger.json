@@ -216,6 +216,241 @@
                 }
             }
         },
+        "/v1/article/{id}/article_replies/{reply_id}": {
+            "put": {
+                "description": "게시글 댓글 수정",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "수정 관련 DTO 사용",
+                        "name": "ArticleReplyModifyDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplyModifyDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "게시글 댓글 삭제",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/article_replies/{reply_id}/cancel_like": {
+            "get": {
+                "description": "게시글 댓글 좋아요 취소",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/article_replies/{reply_id}/cancel_unlike": {
+            "get": {
+                "description": "게시글 댓글 싫어요 취소",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/article_replies/{reply_id}/like": {
+            "get": {
+                "description": "게시글 댓글 좋아요 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article/{id}/article_replies/{reply_id}/unlike": {
+            "get": {
+                "description": "게시글 댓글 싫어요 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "댓글 ID",
+                        "name": "reply_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/article/{id}/cancel_like": {
             "get": {
                 "description": "게시글 좋아요 취소",
@@ -690,6 +925,14 @@
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "article_reply.ArticleReplyModifyDto": {
+            "type": "object",
+            "properties": {
+                "contents": {
                     "type": "string"
                 }
             }
