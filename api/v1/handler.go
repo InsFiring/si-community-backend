@@ -64,10 +64,26 @@ func addTestArticleReplies(articleReplyRepository articlereply.ArticleReplyRepos
 		Contents:  "도움이 많이 됐습니다 ㅎㅎ",
 	}
 
+	articleRepliyRequestDto3 := articlereply.ArticleReplyRequestDto{
+		ArticleId:     1,
+		ParentReplyId: 2,
+		Nickname:      "yung",
+		Contents:      "저는 도움이 별로 안됐는데..ㄷㄷ",
+	}
+
+	articleRepliyRequestDto4 := articlereply.ArticleReplyRequestDto{
+		ArticleId:     1,
+		ParentReplyId: 3,
+		Nickname:      "neo",
+		Contents:      "앗 그런가요? 이상하군요.",
+	}
+
 	articleReplies, err := articleReplyRepository.GetArticleRepliesByArticleId(int32(1))
 	if err != nil && len(articleReplies) == 0 {
 		articleReplyRepository.AddArticleReply(articleRepliyRequestDto1)
 		articleReplyRepository.AddArticleReply(articleRepliyRequestDto2)
+		articleReplyRepository.AddArticleReply(articleRepliyRequestDto3)
+		articleReplyRepository.AddArticleReply(articleRepliyRequestDto4)
 	}
 }
 

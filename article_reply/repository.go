@@ -1,4 +1,4 @@
-package articlereply
+package article_reply
 
 import (
 	"errors"
@@ -20,12 +20,13 @@ func NewArticleReplyRepository(db *gorm.DB) *ArticleReplyRepository {
 
 func (r *ArticleReplyRepository) AddArticleReply(articleReplyRequestDto ArticleReplyRequestDto) (ArticleReplies, error) {
 	articleReply := ArticleReplies{
-		ArticleId:  articleReplyRequestDto.ArticleId,
-		Nickname:   articleReplyRequestDto.Nickname,
-		Contents:   articleReplyRequestDto.Contents,
-		Likes:      DefaultCount,
-		Unlikes:    DefaultCount,
-		IsModified: False,
+		ArticleId:     articleReplyRequestDto.ArticleId,
+		ParentReplyId: articleReplyRequestDto.ParentReplyId,
+		Nickname:      articleReplyRequestDto.Nickname,
+		Contents:      articleReplyRequestDto.Contents,
+		Likes:         DefaultCount,
+		Unlikes:       DefaultCount,
+		IsModified:    False,
 	}
 
 	return articleReply, r.db.Omit("reply_id").Create(&articleReply).Error

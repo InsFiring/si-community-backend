@@ -60,16 +60,17 @@ CREATE TABLE articles (
 DROP TABLE IF EXISTS article_replies;
 
 CREATE TABLE article_replies (
-	reply_id		int auto_increment 	COMMENT '자동생성 등록번호'
-	, article_id	int					COMMENT '글 번호'
-	, nickname 		varchar(50) 		COMMENT '댓글쓴이 닉네임'
-	, contents 		TEXT				COMMENT '댓글 내용'
-	, likes		 	int					COMMENT '댓글 좋아요'
-	, unlikes		int					COMMENT '댓글 싫어요'
-	, is_modified 	varchar(3)			COMMENT '댓글 수정 여부'
-	, created_at 	datetime			COMMENT '가입 날짜'
-	, updated_at 	datetime			COMMENT '정보 수정 날짜'
-	, deleted_at 	datetime			COMMENT '삭제 날짜'
+	reply_id			int auto_increment 	COMMENT '자동생성 등록번호'
+	, article_id		int					COMMENT '글 번호'
+	, parent_reply_id	int					COMMENT	'대댓글 시 상위 댓글 번호'
+	, nickname 			varchar(50) 		COMMENT '댓글쓴이 닉네임'
+	, contents 			TEXT				COMMENT '댓글 내용'
+	, likes		 		int					COMMENT '댓글 좋아요'
+	, unlikes			int					COMMENT '댓글 싫어요'
+	, is_modified 		varchar(3)			COMMENT '댓글 수정 여부'
+	, created_at 		datetime			COMMENT '가입 날짜'
+	, updated_at 		datetime			COMMENT '정보 수정 날짜'
+	, deleted_at 		datetime			COMMENT '삭제 날짜'
 	, primary key(reply_id)
 ) COMMENT '게시글 댓글 테이블'
 ; 

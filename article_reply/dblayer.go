@@ -1,4 +1,4 @@
-package articlereply
+package article_reply
 
 type Dblayer interface {
 	AddArticleReply(articleReplyRequestDto ArticleReplyRequestDto) (ArticleReplies, error)
