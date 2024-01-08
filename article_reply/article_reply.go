@@ -26,7 +26,5 @@ type ArticleReplyRequestDto struct {
 }
 
 type ArticleReplyModifyDto struct {
-	ReplyId   int32  `gorm:"primaryKey;column:reply_id" json:"reply_id"`
-	ArticleId int32  `gorm:"column:article_id" json:"article_id"`
-	Contents  string `gorm:"column:contents" json:"contents"`
+	Contents string `gorm:"column:contents" json:"contents"`
 }

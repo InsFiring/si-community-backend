@@ -71,6 +71,44 @@ definitions:
       view_counts:
         type: integer
     type: object
+  article_reply.ArticleReplies:
+    properties:
+      article_id:
+        type: integer
+      contents:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      is_modified:
+        type: string
+      likes:
+        type: integer
+      nickname:
+        type: string
+      parent_reply_id:
+        type: integer
+      reply_id:
+        type: integer
+      unlikes:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  article_reply.ArticleReplyRequestDto:
+    properties:
+      article_id:
+        type: integer
+      contents:
+        type: string
+      nickname:
+        type: string
+      parent_reply_id:
+        type: integer
+    type: object
   gorm.DeletedAt:
     properties:
       time:
@@ -253,6 +291,26 @@ paths:
             $ref: '#/definitions/article.Articles'
       tags:
       - articles
+  /v1/article/{id}/article_replies:
+    get:
+      consumes:
+      - application/json
+      description: 게시글 댓글 조회
+      parameters:
+      - description: 게시글 ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article_reply.ArticleReplies'
+      tags:
+      - article_reply
   /v1/article/{id}/cancel_like:
     get:
       consumes:
@@ -333,6 +391,27 @@ paths:
             $ref: '#/definitions/article.Articles'
       tags:
       - articles
+  /v1/article_reply:
+    post:
+      consumes:
+      - application/json
+      description: 게시글 댓글 추가
+      parameters:
+      - description: article_id, nickname, contents 필수, parent_reply_id는 대댓글에 따라 선택
+        in: body
+        name: articleReplyRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/article_reply.ArticleReplyRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - article_reply
   /v1/articles:
     get:
       consumes:

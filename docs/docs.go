@@ -191,6 +191,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/article/{id}/article_replies": {
+            "get": {
+                "description": "게시글 댓글 조회",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "게시글 ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/article/{id}/cancel_like": {
             "get": {
                 "description": "게시글 좋아요 취소",
@@ -303,6 +334,39 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/article.Articles"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/article_reply": {
+            "post": {
+                "description": "게시글 댓글 추가",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article_reply"
+                ],
+                "parameters": [
+                    {
+                        "description": "article_id, nickname, contents 필수, parent_reply_id는 대댓글에 따라 선택",
+                        "name": "articleReplyRequestDto",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article_reply.ArticleReplyRequestDto"
+                        }
                     }
                 ],
                 "responses": {
@@ -591,6 +655,64 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "view_counts": {
+                    "type": "integer"
+                }
+            }
+        },
+        "article_reply.ArticleReplies": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "type": "integer"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_modified": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "integer"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "parent_reply_id": {
+                    "type": "integer"
+                },
+                "reply_id": {
+                    "type": "integer"
+                },
+                "unlikes": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "article_reply.ArticleReplyRequestDto": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "type": "integer"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "parent_reply_id": {
                     "type": "integer"
                 }
             }

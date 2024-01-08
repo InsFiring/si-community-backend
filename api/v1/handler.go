@@ -521,6 +521,14 @@ func (h *Handler) AddArticleReply(c *gin.Context) {
 	c.JSON(http.StatusCreated, articleReply)
 }
 
+// @Tags article_reply
+// @Description 게시글 댓글 조회
+// @name GetArticleRepliesByArticleId
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Router /v1/article/{id}/article_replies [get]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) GetArticleRepliesByArticleId(c *gin.Context) {
 	paramId := c.Param("id")
 	articleId, err := strconv.Atoi(paramId)
@@ -539,15 +547,39 @@ func (h *Handler) GetArticleRepliesByArticleId(c *gin.Context) {
 	c.JSON(http.StatusOK, articleReplies)
 }
 
+// @Tags articles
+// @Description 게시글 댓글 수정
+// @name article_reply
+// @Accept  json
+// @Produce  json
+// @Param id path int true "게시글 ID"
+// @Param reply_id path int true "댓글 ID"
+// @Param ArticleModifyDto body article.ArticleModifyDto true "수정 관련 DTO 사용"
+// @Router /v1/article/{id}/article_replies/{reply_id} [put]
+// @Success 200 {object} article_reply.ArticleReplies
 func (h *Handler) ModifyArticleReply(c *gin.Context) {
-	var articleReplyModifyDto articlereply.ArticleReplyModifyDto
-	err := c.ShouldBindJSON(&articleReplyModifyDto)
+	paramId := c.Param("id")
+	articleId, err := strconv.Atoi(paramId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	articleReply, err := h.articleReplyRepository.ModifyArticleReply(articleReplyModifyDto)
+	paramReplyId := c.Param("reply_id")
+	replyId, err := strconv.Atoi(paramReplyId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var articleReplyModifyDto articlereply.ArticleReplyModifyDto
+	err = c.ShouldBindJSON(&articleReplyModifyDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	articleReply, err := h.articleReplyRepository.ModifyArticleReply(articleReplyModifyDto, int32(articleId), int32(replyId))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

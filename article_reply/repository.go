@@ -54,14 +54,13 @@ func (r *ArticleReplyRepository) GetArticleRepliesByArticleId(articleId int32) (
 	return articleReplies, nil
 }
 
-func (r *ArticleReplyRepository) ModifyArticleReply(articleReplyModifyDto ArticleReplyModifyDto) (ArticleReplies, error) {
+func (r *ArticleReplyRepository) ModifyArticleReply(articleReplyModifyDto ArticleReplyModifyDto, articleId int32, replyId int32) (ArticleReplies, error) {
 	var articleReply ArticleReplies
 	var count int64
 
 	result := r.db.Table("article_replies").
 		Where(&ArticleReplies{
-			ArticleId: articleReplyModifyDto.ArticleId,
-			ReplyId:   articleReply.ReplyId}).
+			ReplyId: replyId}).
 		Find(&articleReply)
 
 	result.Count(&count)
