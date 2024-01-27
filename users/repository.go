@@ -187,3 +187,24 @@ func (r *UserRepository) ChangeUserInfo(userModifyDto UserModifyDto) (Users, err
 
 	return user, nil
 }
+
+func (r *UserRepository) SignOutUser(userSignOutDto UserSignOutDto) (string, error) {
+	var user Users
+	var count int64
+
+	result := r.db.Table("users").
+		Where(&Users{Email: userSignOutDto.Email}).
+		Find(&user)
+
+	result.Count(&count)
+	err := result.Error
+	if err != nil {
+		return userSignOutDto.Email, err
+	}
+
+	if count == 0 {
+		return userSignOutDto.Email, errors.New("회원이 없습니다.")
+	}
+
+	return userSignOutDto.Email, r.db.Where(&Users{Email: userSignOutDto.Email}).Delete(&Users{}).Error
+}

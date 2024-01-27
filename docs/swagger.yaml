@@ -189,27 +189,6 @@ info:
   title: SI Community API
   version: "1.0"
 paths:
-  /changeUserInfo:
-    put:
-      consumes:
-      - application/json
-      description: 회원 정보 수정
-      parameters:
-      - description: 회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션
-        in: body
-        name: UserModifyDto
-        required: true
-        schema:
-          $ref: '#/definitions/user.UserModifyDto'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/article.Articles'
-      tags:
-      - users
   /v1/article:
     get:
       consumes:
@@ -627,6 +606,48 @@ paths:
             $ref: '#/definitions/article.Articles'
       tags:
       - articles
+  /v1/changeUserInfo:
+    put:
+      consumes:
+      - application/json
+      description: 회원 정보 수정
+      parameters:
+      - description: 회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션
+        in: body
+        name: UserModifyDto
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserModifyDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserResponseDto'
+      tags:
+      - users
+  /v1/signOut:
+    delete:
+      consumes:
+      - application/json
+      description: 회원 탈퇴
+      parameters:
+      - description: 회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션
+        in: body
+        name: UserModifyDto
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserModifyDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserResponseDto'
+      tags:
+      - users
   /v1/users:
     post:
       consumes:

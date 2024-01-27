@@ -212,8 +212,8 @@ func (h *Handler) HasEmail(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param UserModifyDto body user.UserModifyDto true "회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션"
-// @Router /changeUserInfo [put]
-// @Success 200 {object} article.Articles
+// @Router /v1/changeUserInfo [put]
+// @Success 200 {object} user.UserResponseDto
 func (h *Handler) ChangeUserInfo(c *gin.Context) {
 	var userModifyDto user.UserModifyDto
 	err := c.ShouldBindJSON(&userModifyDto)
@@ -229,6 +229,31 @@ func (h *Handler) ChangeUserInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+// @Tags users
+// @Description 회원 탈퇴
+// @name SignOut
+// @Accept  json
+// @Produce  json
+// @Param UserModifyDto body user.UserModifyDto true "회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션"
+// @Router /v1/signOut [delete]
+// @Success 200 {object} user.UserResponseDto
+func (h *Handler) SignOut(c *gin.Context) {
+	var userSighOutRequestDto user.UserSignOutDto
+	err := c.ShouldBindJSON(&userSighOutRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	deletedEmail, err := h.userRepsitory.SignOutUser(userSighOutRequestDto)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, deletedEmail)
 }
 
 // @Tags articles

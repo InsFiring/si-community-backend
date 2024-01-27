@@ -40,3 +40,7 @@ type UserModifyDto struct {
 	Nickname string `json:"nickname,omitempty"`
 	Company  string `json:"company,omitempty"`
 }
+
+type UserSignOutDto struct {
+	Email string `json:"email"`
+}
