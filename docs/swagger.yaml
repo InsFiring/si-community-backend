@@ -122,6 +122,15 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  user.UserModifyDto:
+    properties:
+      company:
+        type: string
+      email:
+        type: string
+      nickname:
+        type: string
+    type: object
   user.UserRequestDto:
     properties:
       current_password:
@@ -180,6 +189,27 @@ info:
   title: SI Community API
   version: "1.0"
 paths:
+  /changeUserInfo:
+    put:
+      consumes:
+      - application/json
+      description: 회원 정보 수정
+      parameters:
+      - description: 회원 수정 관련 DTO 사용 - email은 필수 나머지는 옵션
+        in: body
+        name: UserModifyDto
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserModifyDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/article.Articles'
+      tags:
+      - users
   /v1/article:
     get:
       consumes:

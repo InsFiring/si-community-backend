@@ -6,7 +6,7 @@ import (
 
 type Users struct {
 	gorm.Model
-	RegisterNumber int32  `gorm:"column:register_number" json:"register_number"`
+	RegisterNumber int32  `gorm:"primaryKey;column:register_number" json:"register_number"`
 	Email          string `gorm:"column:email" json:"email"`
 	Password       string `gorm:"column:password" json:"password"`
 	Nickname       string `gorm:"column:nickname" json:"nickname"`
@@ -33,4 +33,10 @@ type UserResponseDto struct {
 	Company        string `json:"company"`
 	AccessToken    string `json:"access_token"`
 	RefreshToken   string `json:"refresh_token"`
+}
+
+type UserModifyDto struct {
+	Email    string `json:"email"`
+	Nickname string `json:"nickname,omitempty"`
+	Company  string `json:"company,omitempty"`
 }

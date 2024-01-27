@@ -171,3 +171,19 @@ func (r *UserRepository) HasEmail(userRequestDto UserRequestDto) (bool, error) {
 
 	return true, nil
 }
+
+func (r *UserRepository) ChangeUserInfo(userModifyDto UserModifyDto) (Users, error) {
+	var user Users
+
+	result := r.db.Table("users").Where(&Users{Email: userModifyDto.Email}).Find(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+
+	user.Company = userModifyDto.Company
+	user.Nickname = userModifyDto.Nickname
+
+	r.db.Updates(user)
+
+	return user, nil
+}
