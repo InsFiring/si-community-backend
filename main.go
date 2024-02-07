@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 	rest "si-community/api/v1"
 	"si-community/config"
 
@@ -19,7 +19,7 @@ var (
 func init() {
 	argumentParser()
 
-	content, err := ioutil.ReadFile(configPath)
+	content, err := os.ReadFile(configPath)
 	if err != nil {
 		fmt.Errorf("파일 읽는 중 에러 발생: ", err)
 		return
