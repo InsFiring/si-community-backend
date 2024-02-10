@@ -21,18 +21,28 @@ CREATE TABLE users (
 ) COMMENT '회원 정보 테이블'
 ;
 
-DROP TABLE IF EXISTS user_tokens;
+DROP TABLE IF EXISTS access_tokens;
 
-CREATE TABLE user_tokens (
-    token_id bigint auto_increment			COMMENT '자동생성 토큰번호'
+CREATE TABLE access_tokens (
+    id bigint auto_increment			COMMENT '자동생성 토큰번호'
     , register_number int					COMMENT '유저 등록 번호(pk)'
     , token TEXT NOT NULL					COMMENT '토큰'
     , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
     , created_at 	datetime				COMMENT '토큰 생성 날짜'
-	, updated_at 	datetime				COMMENT '토큰 수정 날짜'
-	, deleted_at 	datetime				COMMENT '토큰 삭제 날짜'
     , primary key(token_id)
-) COMMENT '로그인 토큰 테이블'
+) COMMENT '로그인 access 토큰 테이블'
+;
+
+DROP TABLE IF EXISTS refresh_tokens;
+
+CREATE TABLE refresh_tokens (
+    id bigint auto_increment			COMMENT '자동생성 토큰번호'
+    , register_number int					COMMENT '유저 등록 번호(pk)'
+    , token TEXT NOT NULL					COMMENT '토큰'
+    , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
+    , created_at 	datetime				COMMENT '토큰 생성 날짜'
+    , primary key(token_id)
+) COMMENT '로그인 refresh 토큰 테이블'
 ;
 
 

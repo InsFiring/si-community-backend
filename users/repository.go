@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"si-community/tokens"
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -97,7 +98,7 @@ func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponse
 		return UserResponseDto{}, errors.New("Invalid password")
 	}
 
-	token, err := GenerateTokens(user.RegisterNumber)
+	token, err := tokens.GenerateTokens(user.RegisterNumber)
 	if err != nil {
 		return UserResponseDto{}, err
 	}
