@@ -1,11 +1,8 @@
 package user
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"errors"
 	"fmt"
-	"si-community/tokens"
 
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
@@ -31,15 +28,6 @@ type Claims struct {
 
 func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db}
-}
-
-func generateRandomKey(length int) (string, error) {
-	key := make([]byte, length)
-	_, err := rand.Read(key)
-	if err != nil {
-		return "", err
-	}
-	return base64.URLEncoding.EncodeToString(key), nil
 }
 
 func (r *UserRepository) AddUser(user Users) (Users, error) {
@@ -80,27 +68,22 @@ func hashPassword(password *string) error {
 	return nil
 }
 
-func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponseDto, error) {
+func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (*UserResponseDto, error) {
 	var user Users
 	var userCount int64
 
 	result := r.db.Table("users").Where(&Users{Email: userRequestDto.Email}).Find(&user)
 	if result.Error != nil {
-		return UserResponseDto{}, result.Error
+		return &UserResponseDto{}, result.Error
 	}
 
 	result.Count(&userCount)
 	if userCount == 0 {
-		return UserResponseDto{}, errors.New("User not Founded")
+		return &UserResponseDto{}, errors.New("User not Founded")
 	}
 
 	if !checkPassword(user.Password, userRequestDto.CurrentPassword) {
-		return UserResponseDto{}, errors.New("Invalid password")
-	}
-
-	token, err := tokens.GenerateTokens(user.RegisterNumber)
-	if err != nil {
-		return UserResponseDto{}, err
+		return &UserResponseDto{}, errors.New("Invalid password")
 	}
 
 	userResponseDto := UserResponseDto{
@@ -108,11 +91,9 @@ func (r *UserRepository) SignInUser(userRequestDto UserRequestDto) (UserResponse
 		Email:          user.Email,
 		Nickname:       user.Nickname,
 		Company:        user.Company,
-		AccessToken:    token.AccessToken,
-		RefreshToken:   token.RefreshToken,
 	}
 
-	return userResponseDto, nil
+	return &userResponseDto, nil
 }
 
 func checkPassword(existingHash, password string) bool {

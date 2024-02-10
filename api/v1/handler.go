@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"si-community/article"
 	articlereply "si-community/article_reply"
+	"si-community/tokens"
 	user "si-community/users"
 	"strconv"
 
@@ -14,6 +15,7 @@ import (
 
 type Handler struct {
 	userRepsitory          user.UserRepository
+	tokenRepository        tokens.TokenRepository
 	articleRepository      article.ArticleRepository
 	articleReplyRepository articlereply.ArticleReplyRepository
 }
@@ -90,6 +92,7 @@ func addTestArticleReplies(articleReplyRepository articlereply.ArticleReplyRepos
 func NewHandler(dbConn *gorm.DB) (*Handler, error) {
 	handler := new(Handler)
 	handler.userRepsitory = *user.NewUserRepository(dbConn)
+	handler.tokenRepository = *tokens.NewTokenRepository(dbConn)
 	handler.articleRepository = *article.NewArticleRepository(dbConn)
 	handler.articleReplyRepository = *articlereply.NewArticleReplyRepository(dbConn)
 
@@ -144,6 +147,18 @@ func (h *Handler) SignIn(c *gin.Context) {
 	}
 
 	userResponseDto, err := h.userRepsitory.SignInUser(userRequestDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	userResponseDto, err = h.tokenRepository.GetOrCreateAccessToken(userResponseDto)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	userResponseDto, err = h.tokenRepository.GetOrCreateRefreshToken(userResponseDto)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

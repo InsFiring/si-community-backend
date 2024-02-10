@@ -29,7 +29,9 @@ CREATE TABLE access_tokens (
     , token TEXT NOT NULL					COMMENT '토큰'
     , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
     , created_at 	datetime				COMMENT '토큰 생성 날짜'
-    , primary key(token_id)
+	, updated_at 	datetime			COMMENT '토큰 수정 날짜'
+	, deleted_at 	datetime			COMMENT '토큰 삭제 날짜'
+    , primary key(id)
 ) COMMENT '로그인 access 토큰 테이블'
 ;
 
@@ -41,7 +43,9 @@ CREATE TABLE refresh_tokens (
     , token TEXT NOT NULL					COMMENT '토큰'
     , expiration_time TIMESTAMP NOT NULL	COMMENT '토큰 만료 기간'
     , created_at 	datetime				COMMENT '토큰 생성 날짜'
-    , primary key(token_id)
+	, updated_at 	datetime			COMMENT '토큰 수정 날짜'
+	, deleted_at 	datetime			COMMENT '토큰 삭제 날짜'
+    , primary key(id)
 ) COMMENT '로그인 refresh 토큰 테이블'
 ;
 

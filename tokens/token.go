@@ -25,12 +25,20 @@ type AccessToken struct {
 	ExpirationTime time.Time `gorm:"column:expiration_time" json:"expiration_time"`
 }
 
+func (AccessToken) TableName() string {
+	return "access_tokens"
+}
+
 type RefreshToken struct {
 	gorm.Model
 	ID             int32     `gorm:"primaryKey;" json:"id"`
 	RegisterNumber int32     `gorm:"column:register_number" json:"register_number"`
 	Token          string    `gorm:"column:token" json:"token"`
 	ExpirationTime time.Time `gorm:"column:expiration_time" json:"expiration_time"`
+}
+
+func (RefreshToken) TableName() string {
+	return "refresh_tokens"
 }
 
 func (a AccessToken) GenerateToken(userID int32) (Token, error) {
