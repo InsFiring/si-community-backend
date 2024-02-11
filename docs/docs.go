@@ -56,7 +56,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -87,7 +87,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -118,7 +118,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -156,7 +156,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -185,7 +185,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -216,7 +216,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -263,7 +263,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -299,7 +299,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -337,7 +337,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -375,7 +375,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -413,7 +413,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -451,7 +451,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article_reply.ArticleReplies"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -482,7 +482,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -513,7 +513,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -544,7 +544,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -575,7 +575,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -608,7 +608,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -646,7 +646,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/article.Articles"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -679,7 +679,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserResponseDto"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -712,7 +712,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserResponseDto"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -744,7 +744,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/user.Users"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -777,7 +777,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserResponseDto"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -810,7 +810,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/api.EmailResponse"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -843,7 +843,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserResponseDto"
+                            "$ref": "#/definitions/api.APIResponse"
                         }
                     }
                 }
@@ -851,11 +851,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "api.EmailResponse": {
+        "api.APIResponse": {
             "type": "object",
             "properties": {
-                "has_email": {
-                    "type": "boolean"
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
                 }
             }
         },
@@ -909,94 +913,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "article.Articles": {
-            "type": "object",
-            "properties": {
-                "article_id": {
-                    "type": "integer"
-                },
-                "company": {
-                    "type": "string"
-                },
-                "contents": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_modified": {
-                    "type": "string"
-                },
-                "likes": {
-                    "type": "integer"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "ratings": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "unlikes": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "view_counts": {
-                    "type": "integer"
-                }
-            }
-        },
-        "article_reply.ArticleReplies": {
-            "type": "object",
-            "properties": {
-                "article_id": {
-                    "type": "integer"
-                },
-                "contents": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
-                    "$ref": "#/definitions/gorm.DeletedAt"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "is_modified": {
-                    "type": "string"
-                },
-                "likes": {
-                    "type": "integer"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "parent_reply_id": {
-                    "type": "integer"
-                },
-                "reply_id": {
-                    "type": "integer"
-                },
-                "unlikes": {
-                    "type": "integer"
-                },
-                "updatedAt": {
                     "type": "string"
                 }
             }
@@ -1063,29 +979,6 @@ const docTemplate = `{
                 },
                 "new_password": {
                     "type": "string"
-                }
-            }
-        },
-        "user.UserResponseDto": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "company": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                },
-                "register_number": {
-                    "type": "integer"
                 }
             }
         },

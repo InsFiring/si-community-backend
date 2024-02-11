@@ -1,9 +1,12 @@
 basePath: /v1
 definitions:
-  api.EmailResponse:
+  api.APIResponse:
     properties:
-      has_email:
-        type: boolean
+      data: {}
+      message:
+        type: string
+      status_code:
+        type: integer
     type: object
   article.ArticleModifyDto:
     properties:
@@ -38,64 +41,6 @@ definitions:
       ratings:
         type: integer
       title:
-        type: string
-    type: object
-  article.Articles:
-    properties:
-      article_id:
-        type: integer
-      company:
-        type: string
-      contents:
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
-      is_modified:
-        type: string
-      likes:
-        type: integer
-      nickname:
-        type: string
-      ratings:
-        type: integer
-      title:
-        type: string
-      unlikes:
-        type: integer
-      updatedAt:
-        type: string
-      view_counts:
-        type: integer
-    type: object
-  article_reply.ArticleReplies:
-    properties:
-      article_id:
-        type: integer
-      contents:
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        $ref: '#/definitions/gorm.DeletedAt'
-      id:
-        type: integer
-      is_modified:
-        type: string
-      likes:
-        type: integer
-      nickname:
-        type: string
-      parent_reply_id:
-        type: integer
-      reply_id:
-        type: integer
-      unlikes:
-        type: integer
-      updatedAt:
         type: string
     type: object
   article_reply.ArticleReplyModifyDto:
@@ -139,21 +84,6 @@ definitions:
         type: string
       new_password:
         type: string
-    type: object
-  user.UserResponseDto:
-    properties:
-      access_token:
-        type: string
-      company:
-        type: string
-      email:
-        type: string
-      nickname:
-        type: string
-      refresh_token:
-        type: string
-      register_number:
-        type: integer
     type: object
   user.Users:
     properties:
@@ -218,7 +148,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
     post:
@@ -238,7 +168,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article/{id}:
@@ -258,7 +188,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
     get:
@@ -277,7 +207,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
     put:
@@ -302,7 +232,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article/{id}/article_replies:
@@ -322,7 +252,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/article_replies/{reply_id}:
@@ -347,7 +277,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
     put:
@@ -377,7 +307,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/article_replies/{reply_id}/cancel_like:
@@ -402,7 +332,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/article_replies/{reply_id}/cancel_unlike:
@@ -427,7 +357,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/article_replies/{reply_id}/like:
@@ -452,7 +382,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/article_replies/{reply_id}/unlike:
@@ -477,7 +407,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article_reply.ArticleReplies'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/article/{id}/cancel_like:
@@ -497,7 +427,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article/{id}/cancel_unlike:
@@ -517,7 +447,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article/{id}/like:
@@ -537,7 +467,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article/{id}/unlike:
@@ -557,7 +487,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/article_reply:
@@ -578,7 +508,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - article_reply
   /v1/articles:
@@ -603,7 +533,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/article.Articles'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - articles
   /v1/changeUserInfo:
@@ -624,7 +554,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserResponseDto'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
   /v1/signOut:
@@ -645,7 +575,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserResponseDto'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
   /v1/users:
@@ -666,7 +596,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/user.Users'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
   /v1/users/changePassword:
@@ -687,7 +617,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserResponseDto'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
   /v1/users/emails:
@@ -708,7 +638,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/api.EmailResponse'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
   /v1/users/signin:
@@ -729,7 +659,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserResponseDto'
+            $ref: '#/definitions/api.APIResponse'
       tags:
       - users
 swagger: "2.0"
